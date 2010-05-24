@@ -55,7 +55,7 @@ SET(QXT_QXTNETWORK_DEPENDSON QxtCore)
 SET(QXT_QXTQSQL_DEPENDSON QxtCore)
 SET(QXT_QXTBERKELEY_DEPENDSON QxtCore)
 
-FIND_PATH(QXT_DIR libqxt.pro /usr/include/foo /usr/local/include/foo)
+FIND_PATH(QXT_DIR libqxt.pro Qxt/include/QxtCore/Qxt /usr/include/foo /usr/local/include/foo)
 
 FOREACH(mod ${QXT_MODULES})
     STRING(TOUPPER ${mod} U_MOD)
@@ -157,3 +157,5 @@ FOREACH( module ${QXT_MODULES} )
     ENDIF(QXT_USE_${U_MOD} OR QXT_DEPENDS_${U_MOD})
 ENDFOREACH(module)
 MESSAGE(STATUS "Found Qxt Libraries:${QXT_FOUND_MODULES}")
+
+MESSAGE(STATUS "Include directories:${QXT_INCLUDE_DIRS}")
