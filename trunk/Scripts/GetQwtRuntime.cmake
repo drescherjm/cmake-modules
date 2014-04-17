@@ -23,6 +23,8 @@ if (GET_RUNTIME)
 		STRING( REGEX REPLACE ".lib$" "" QWT_RELEASE_DLL_NAME ${QWT_RELEASE_DLL_NAME_EXT})
 		
 		add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QWT_DEBUG_DLL_BASE}/${QWT_DEBUG_DLL_NAME}.dll" Debug )
-		add_runtime_file_release( ${RUNTIME_BATCH_FILENAME} "${QWT_RELEASE_DLL_BASE}/${QWT_RELEASE_DLL_NAME}.dll" RelWithDebInfo )
+		add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QWT_RELEASE_DLL_BASE}/${QWT_RELEASE_DLL_NAME}.dll" RelWithDebInfo )
+		add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QWT_RELEASE_DLL_BASE}/${QWT_RELEASE_DLL_NAME}.dll" Release )
+		
 	ENDIF(WIN32)
 endif(GET_RUNTIME)
