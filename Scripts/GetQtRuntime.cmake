@@ -26,7 +26,7 @@ if (GET_RUNTIME)
 	
 #########################################################################################
 
-	macro( add_sqldriver_file_release BatchFileName RuntimeFile Release )
+	macro( add_sqldriver_file_for_packaging BatchFileName RuntimeFile Release )
 		add_qt_sqldriver_file( ${BatchFileName} ${RuntimeFile} ${Release} )
 		#SET( ${PROJECT_NAME}_RELEASE_RUNTIME  ${${PROJECT_NAME}_RELEASE_RUNTIME} ${RuntimeFile} )
 		
@@ -35,18 +35,20 @@ if (GET_RUNTIME)
 			COMPONENT Applications
 		)
 		
-	endmacro( add_sqldriver_file_release )
+	endmacro( add_sqldriver_file_for_packaging )
 	
 #########################################################################################	
 
 	IF (WIN32)
 		FOREACH(LIB QtCore QtXml QtGui QtNetwork QtSql)
 				add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}d${QT_VERSION_MAJOR}.dll" Debug )
-				add_runtime_file_release( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" RelWithDebInfo )
+				add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" RelWithDebInfo )
+				add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" RelWithDebInfo )
 		ENDFOREACH(LIB)
 		
 		add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_PLUGINS_DIR}/sqldrivers/qsqlited${QT_VERSION_MAJOR}.dll" Debug )
-		add_sqldriver_file_release( ${RUNTIME_BATCH_FILENAME} "${QT_PLUGINS_DIR}/sqldrivers/qsqlite${QT_VERSION_MAJOR}.dll" RelWithDebInfo )
+		add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_PLUGINS_DIR}/sqldrivers/qsqlite${QT_VERSION_MAJOR}.dll" RelWithDebInfo )
+		add_sqldriver_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_PLUGINS_DIR}/sqldrivers/qsqlite${QT_VERSION_MAJOR}.dll" Release )
 		
 	ENDIF(WIN32)
 endif(GET_RUNTIME)
