@@ -164,3 +164,19 @@ MACRO(SUBDIRLIST result curdir)
   SET(${result} ${dirlist})
 ENDMACRO()
 #########################################################################################
+
+macro ( setup_library_source_groups )
+
+	SOURCE_GROUP("Generated" FILES
+		  ${${LOCAL_PROJECT_NAME}_RC_SRCS}
+		  ${${LOCAL_PROJECT_NAME}_MOC_SRCS}
+		  ${${LOCAL_PROJECT_NAME}_UI_HDRS}
+	)
+
+	SOURCE_GROUP("Resources" FILES
+		  ${${LOCAL_PROJECT_NAME}_UIS}
+		  ${${LOCAL_PROJECT_NAME}_RCS}
+	)
+endmacro ( setup_library_source_groups )
+
+#########################################################################################
