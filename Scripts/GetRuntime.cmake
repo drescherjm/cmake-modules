@@ -35,11 +35,22 @@ if (GET_RUNTIME)
 	
 #########################################################################################
 
-	macro( add_runtime_file_for_packaging RuntimeFile )
-	    message( STATUS "Packaging File: " ${RuntimeFile} )
-		add_runtime_file( ${RUNTIME_BATCH_FILENAME} ${RuntimeFile} Release )
-		add_runtime_file( ${RUNTIME_BATCH_FILENAME} ${RuntimeFile} RelWithDebInfo )
-		SET( ${PROJECT_NAME}_PACKAGING_RUNTIME  ${${PROJECT_NAME}_PACKAGING_RUNTIME} ${RuntimeFile} )
-	endmacro( add_runtime_file_for_packaging )
+#	macro( add_runtime_file_for_packaging RuntimeFile )
+#	    message( STATUS "Packaging File: " ${RuntimeFile} )
+#		add_runtime_file( ${RUNTIME_BATCH_FILENAME} ${RuntimeFile} Release )
+#		add_runtime_file( ${RUNTIME_BATCH_FILENAME} ${RuntimeFile} RelWithDebInfo )
+#		SET( ${PROJECT_NAME}_PACKAGING_RUNTIME  ${${PROJECT_NAME}_PACKAGING_RUNTIME} ${RuntimeFile} )
+#	endmacro( add_runtime_file_for_packaging )
+	
+	
+macro( add_runtime_file_for_packaging BatchFileName RuntimeFile Release )
+
+	if (DEBUG_NSIS_PACKAGING)
+		message( STATUS "Packaging File: " ${RuntimeFile} )
+	endif(DEBUG_NSIS_PACKAGING)
+	
+	add_runtime_file( ${BatchFileName} ${RuntimeFile} ${Release} )
+	SET( ${PROJECT_NAME}_PACKAGING_RUNTIME  ${${PROJECT_NAME}_PACKAGING_RUNTIME} ${RuntimeFile} )
+endmacro( add_runtime_file_for_packaging )
 	
 endif(GET_RUNTIME)
