@@ -43,7 +43,7 @@ if (GET_RUNTIME)
 		FOREACH(LIB QtCore QtXml QtGui QtNetwork QtSql)
 				add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}d${QT_VERSION_MAJOR}.dll" Debug )
 				add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" RelWithDebInfo )
-				add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" RelWithDebInfo )
+				add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" Release )
 		ENDFOREACH(LIB)
 		
 		add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_PLUGINS_DIR}/sqldrivers/qsqlited${QT_VERSION_MAJOR}.dll" Debug )
