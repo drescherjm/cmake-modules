@@ -52,3 +52,4 @@ if (GET_RUNTIME)
 		
 	ENDIF(WIN32)
 endif(GET_RUNTIME)
+
