@@ -1,5 +1,8 @@
 OPTION(DEBUG_COMPILER_VERSION "Debug the compiler version determinarion" OFF)
 
+cmake_policy(PUSH)
+cmake_policy(SET CMP0054 OLD)
+
 # Attempt to guess the compiler suffix
 # NOTE: this is not perfect yet, if you experience any issues
 # please report them and use the PROJECT_COMPILER_VERSION variable
@@ -44,6 +47,8 @@ if(DEBUG_COMPILER_VERSION)
   message(STATUS "[ ${CMAKE_CURRENT_LIST_FILE}:${CMAKE_CURRENT_LIST_LINE} ] "
 	"guessed PROJECT_COMPILER_VERSION = ${PROJECT_COMPILER_VERSION}")
 endif()
+
+cmake_policy(POP)
 
 if (CMAKE_SIZEOF_VOID_P MATCHES 8)
 	set( PROJECT_ARCH "x86_64" ) 
