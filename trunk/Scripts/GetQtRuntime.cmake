@@ -5,6 +5,8 @@
 
 if (GET_RUNTIME)
 
+	OPTION(DEBUG_GET_QT_RUNTIME "Debug the Qt libraries added to the getruntime script." ON)
+
 #########################################################################################
 
 	macro( add_qt_sqldriver_file BatchFileName RuntimeFile Release )
@@ -40,7 +42,23 @@ if (GET_RUNTIME)
 #########################################################################################	
 
 	IF (WIN32)
-		FOREACH(LIB QtCore QtXml QtGui QtNetwork QtSql)
+		
+		# Get the list of Qt components.
+		set( QT_COMPONENTS QtCore )
+		foreach(LIB QtGui Qt3Support QtAssistant QtAssistantClient QAxContainer QAxServer QtDBus QtDesigner QtDesignerComponents QtHelp 
+				QtMotif QtMultimedia QtNetwork QtNsPLugin QtOpenGL QtScript QtScriptTools QtSql QtSvg QtTest QtUiTools QtWebKit QtXml 
+				QtXmlPatterns)
+			string( TOUPPER ${LIB} _COMPONENT )
+			if ( QT_USE_${_COMPONENT} ) 
+				list(APPEND QT_COMPONENTS ${LIB})
+			endif()
+		endforeach(LIB)
+			
+		# Add each component to the list of runtime files
+		FOREACH(LIB ${QT_COMPONENTS})
+				if ( DEBUG_GET_QT_RUNTIME )
+					message( STATUS "Adding Qt Runtime file: " ${LIB} )
+				endif (DEBUG_GET_QT_RUNTIME)
 				add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}d${QT_VERSION_MAJOR}.dll" Debug )
 				add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" RelWithDebInfo )
 				add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" Release )

@@ -1,3 +1,7 @@
+if(WIN32)
+	OPTION( SYSTEM_FORCE_CONSOLE_WINDOW "Make all programs console applications for debugging purposes." OFF)
+endif(WIN32)
+
 #########################################################################################
 
 macro ( setup_library_qt_wrap_support )
@@ -52,7 +56,11 @@ function( setup_qt_executable ExecTarget)
 	if (APPLE)
 	   SET(GUI_TYPE MACOSX_BUNDLE)
 	elseif(WIN32)
-	   set(GUI_TYPE WIN32)
+		if ( SYSTEM_FORCE_CONSOLE_WINDOW )
+			set(GUI_TYPE)
+		else( SYSTEM_FORCE_CONSOLE_WINDOW )
+			set(GUI_TYPE WIN32)
+		endif(SYSTEM_FORCE_CONSOLE_WINDOW)
 	endif()
 
 	add_executable(${ExecTarget} ${GUI_TYPE} ${${ExecTarget}_SRCS} 
