@@ -45,9 +45,7 @@ if (GET_RUNTIME)
 		
 		# Get the list of Qt components.
 		set( QT_COMPONENTS QtCore )
-		foreach(LIB QtGui Qt3Support QtAssistant QtAssistantClient QAxContainer QAxServer QtDBus QtDesigner QtDesignerComponents QtHelp 
-				QtMotif QtMultimedia QtNetwork QtNsPLugin QtOpenGL QtScript QtScriptTools QtSql QtSvg QtTest QtUiTools QtWebKit QtXml 
-				QtXmlPatterns)
+		foreach(LIB ${QT_MODULES})
 			string( TOUPPER ${LIB} _COMPONENT )
 			if ( QT_USE_${_COMPONENT} ) 
 				list(APPEND QT_COMPONENTS ${LIB})
@@ -64,9 +62,21 @@ if (GET_RUNTIME)
 				add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" Release )
 		ENDFOREACH(LIB)
 		
-		add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_PLUGINS_DIR}/sqldrivers/qsqlited${QT_VERSION_MAJOR}.dll" Debug )
-		add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_PLUGINS_DIR}/sqldrivers/qsqlite${QT_VERSION_MAJOR}.dll" RelWithDebInfo )
-		add_sqldriver_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_PLUGINS_DIR}/sqldrivers/qsqlite${QT_VERSION_MAJOR}.dll" Release )
+		if (QT_USE_QTSQL)
+			foreach(SQLDRIVER ${QT_QTSQL_PLUGINS}) 
+				string( TOUPPER ${SQLDRIVER} _COMPONENT )
+				if ( QT_${_COMPONENT}_PLUGIN_RELEASE )
+					
+					if ( DEBUG_GET_QT_RUNTIME )
+						message( STATUS "Found SQL Driver: " ${SQLDRIVER} )
+					endif ( DEBUG_GET_QT_RUNTIME )
+					
+					add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_DEBUG}" Debug )
+					add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" RelWithDebInfo )
+					add_sqldriver_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" Release )
+				endif()
+			endforeach(SQLDRIVER)
+		endif (QT_USE_QTSQL)
 		
 	ENDIF(WIN32)
 endif(GET_RUNTIME)
