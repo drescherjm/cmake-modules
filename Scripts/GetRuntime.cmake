@@ -52,5 +52,24 @@ macro( add_runtime_file_for_packaging BatchFileName RuntimeFile Release )
 	add_runtime_file( ${BatchFileName} ${RuntimeFile} ${Release} )
 	SET( ${PROJECT_NAME}_PACKAGING_RUNTIME  ${${PROJECT_NAME}_PACKAGING_RUNTIME} ${RuntimeFile} )
 endmacro( add_runtime_file_for_packaging )
+
+#########################################################################################
+
+	macro( add_runtime_for_imported_target TargetName )
+		get_target_property( Configurations ${TargetName} IMPORTED_CONFIGURATIONS )
+		FOREACH(Configuration ${Configurations})
+			message( STATUS "Supporting Configuration ${Configuration}" )
+			get_target_property( implib ${TargetName} IMPORTED_IMPLIB_${Configuration} )
+			# Remember results ending in -NOTFOUND are evaluated to FALSE
+			if(implib)
+				get_target_property( sharedlib ${TargetName} IMPORTED_LOCATION_${Configuration} )
+				if(sharedlib)
+					add_runtime_file( "${RUNTIME_BATCH_FILENAME}" "${sharedlib}" "${Configuration}" )
+				endif(sharedlib)
+			else(implib)
+				message( STATUS "Could not find import for target ${TargetName} Configuration ${Configuration}" )
+			endif(implib)
+		ENDFOREACH(Configuration)
+	endmacro( add_runtime_for_imported_target )
 	
 endif(GET_RUNTIME)
