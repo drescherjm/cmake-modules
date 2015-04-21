@@ -152,8 +152,10 @@ macro(create_string_from_list my_str)
  endforeach(VALUE)
  set(${my_str} ${result})
 endmacro(create_string_from_list) 
+
 #########################################################################################
-MACRO(SUBDIRLIST result curdir)
+
+macro(SUBDIRLIST result curdir)
   FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
   SET(dirlist "")
   FOREACH(child ${children})
@@ -162,7 +164,8 @@ MACRO(SUBDIRLIST result curdir)
     ENDIF()
   ENDFOREACH()
   SET(${result} ${dirlist})
-ENDMACRO()
+endmacro()
+
 #########################################################################################
 
 macro ( setup_library_source_groups )
