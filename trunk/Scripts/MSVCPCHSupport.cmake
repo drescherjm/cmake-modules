@@ -11,9 +11,22 @@ conditional_define(USE_MSVC_PCH_WITH_MOC USING_PCH_WITH_MOC)
 
 #########################################################################################
 
+macro ( create_pch_source_if_needed ProjectName )
+	if ( NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${ProjectName}PCH.cxx" AND  NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/${ProjectName}PCH.cxx")
+		message( STATUS ${CMAKE_CURRENT_SOURCE_DIR}/${ProjectName}PCH.cxx" does not exist! This file will be generated in the build tree." )
+		
+		FILE( WRITE "${CMAKE_CURRENT_BINARY_DIR}/${ProjectName}PCH.cxx" "\#include \"${ProjectName}PCH.h\"")
+		
+	endif ()
+endmacro(create_pch_source_if_needed)
+
+#########################################################################################
+
 macro( MSVC_PCH_SUPPORT ProjectName )
 if (MSVC)
 	if (USE_MSVC_PCH)
+	
+		create_pch_source_if_needed( ${ProjectName} )
 	
 		add_definitions(-DUSING_PCH)
 		
