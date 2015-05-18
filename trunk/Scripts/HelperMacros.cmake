@@ -183,3 +183,15 @@ macro ( setup_library_source_groups )
 endmacro ( setup_library_source_groups )
 
 #########################################################################################
+
+macro( add_library_module ModuleListName ModuleName )
+	get_property(is_defined GLOBAL PROPERTY ${ModuleListName} DEFINED)
+	if(NOT is_defined)
+		define_property(GLOBAL PROPERTY ${ModuleListName} 
+			BRIEF_DOCS "List of library modules"
+			FULL_DOCS "List of library modules")
+	endif()
+	set_property(GLOBAL APPEND PROPERTY ${ModuleListName} "${ModuleName}")	
+endmacro( add_library_module )
+
+#########################################################################################
