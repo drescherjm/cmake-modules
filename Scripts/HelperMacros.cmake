@@ -142,6 +142,15 @@ endmacro( myproject )
 
 #########################################################################################
 
+macro( mysubproject ProjectName )
+	set( LOCAL_SUBPROJECT_NAME ${ProjectName})
+	set( LOCAL_SUBPROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+	set( LOCAL_SUBPROJECT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+		
+endmacro( mysubproject )
+
+#########################################################################################
+
 macro(create_string_from_list my_str)
  foreach(VALUE ${ARGN})
   if ("${VALUE}" STREQUAL "${ARGV1}")
