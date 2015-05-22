@@ -169,17 +169,42 @@ endmacro()
 #########################################################################################
 
 macro ( setup_library_source_groups )
+	
+	set (extra_macro_args ${ARGN})
+	list(LENGTH extra_macro_args num_extra_args)
+	if (${num_extra_args} GREATER 0)
+		
+		SOURCE_GROUP("${ARGV0}\\Generated" FILES
+			  ${${LOCAL_PROJECT_NAME}_RC_SRCS}
+			  ${${LOCAL_PROJECT_NAME}_MOC_SRCS}
+			  ${${LOCAL_PROJECT_NAME}_UI_HDRS}
+		)
 
-	SOURCE_GROUP("Generated" FILES
-		  ${${LOCAL_PROJECT_NAME}_RC_SRCS}
-		  ${${LOCAL_PROJECT_NAME}_MOC_SRCS}
-		  ${${LOCAL_PROJECT_NAME}_UI_HDRS}
-	)
+		SOURCE_GROUP("${ARGV0}\\Resources" FILES
+			  ${${LOCAL_PROJECT_NAME}_UIS}
+			  ${${LOCAL_PROJECT_NAME}_RCS}
+		)
+		SOURCE_GROUP("${ARGV0}\\Source Files" FILES
+			 ${${LOCAL_PROJECT_NAME}_SRCS}
+		)
+			
+		SOURCE_GROUP("${ARGV0}\\Header Files" FILES
+			 ${${LOCAL_PROJECT_NAME}_EXT_HDRS}
+			 ${${LOCAL_PROJECT_NAME}_MOC_HDRS}
+		)
+	else()
+		SOURCE_GROUP("Generated" FILES
+			  ${${LOCAL_PROJECT_NAME}_RC_SRCS}
+			  ${${LOCAL_PROJECT_NAME}_MOC_SRCS}
+			  ${${LOCAL_PROJECT_NAME}_UI_HDRS}
+		)
 
-	SOURCE_GROUP("Resources" FILES
-		  ${${LOCAL_PROJECT_NAME}_UIS}
-		  ${${LOCAL_PROJECT_NAME}_RCS}
-	)
+		SOURCE_GROUP("Resources" FILES
+			  ${${LOCAL_PROJECT_NAME}_UIS}
+			  ${${LOCAL_PROJECT_NAME}_RCS}
+		)
+	endif()
+	
 endmacro ( setup_library_source_groups )
 
 #########################################################################################
