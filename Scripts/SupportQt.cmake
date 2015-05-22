@@ -20,7 +20,7 @@ endif (USE_MSVC_PCH AND USE_MSVC_PCH_WITH_MOC)
 # this will run uic on .ui files:
 QT4_WRAP_UI( ${LOCAL_PROJECT_NAME}_UI_HDRS ${${LOCAL_PROJECT_NAME}_UIS} )
 
-setup_library_source_groups()
+#setup_library_source_groups()
 
 endmacro ( setup_library_qt_wrap_support )
 
