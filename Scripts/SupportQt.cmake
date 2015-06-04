@@ -90,5 +90,4 @@ function( setup_qt_plugin PluginTargetName)
 	
 endfunction( setup_qt_plugin)
 
-
 #########################################################################################
