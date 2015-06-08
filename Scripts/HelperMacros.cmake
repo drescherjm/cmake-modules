@@ -229,3 +229,16 @@ macro( add_library_module ModuleListName ModuleName )
 endmacro( add_library_module )
 
 #########################################################################################
+
+macro(init_lib_shared_static_option shared)
+option (BUILD_${LOCAL_PROJECT_NAME}_SHARED		"Build ${LOCAL_PROJECT_NAME} as a shared library" ${shared})
+
+if (BUILD_${LOCAL_PROJECT_NAME}_SHARED)
+	set(${LOCAL_PROJECT_NAME}_SHARED SHARED)
+else (BUILD_${LOCAL_PROJECT_NAME}_SHARED)
+	set(${LOCAL_PROJECT_NAME}_SHARED)
+endif (BUILD_${LOCAL_PROJECT_NAME}_SHARED)
+
+endmacro(init_lib_shared_static_option)
+
+#########################################################################################
