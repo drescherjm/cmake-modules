@@ -1,3 +1,30 @@
+#########################################################################################
+
+set(${PROJECT_NAME}_QT_VERSION "4" CACHE STRING "Expected Qt version")
+mark_as_advanced(${PROJECT_NAME}_QT_VERSION)
+
+set_property(CACHE ${PROJECT_NAME}_QT_VERSION PROPERTY STRINGS 4 5)
+
+if(NOT (${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "4" OR ${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "5"))
+	message(FATAL_ERROR "Expected value for ${PROJECT_NAME}_QT_VERSION is either '4' or '5'")
+endif()
+
+#########################################################################################
+
+if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+	define_from_environment(QT_DIR Qt)
+	
+	#find_path(QT_CMAKE_PATH NAME CMake PATHS ${QT_DIR} ${QT_DIR}/qtbase NO_DEFAULT_PATH)
+	
+	if( IS_DIRECTORY ${QT_DIR}/qtbase/lib/cmake ) 
+		#set_property(CACHE QT_CMAKE_PATH PROPERTY PATH ${QT_DIR}/qtbase/lib/cmake)
+		set(QT_CMAKE_PATH ${QT_DIR}/qtbase/lib/cmake CACHE PATH "Set the path to help cmake find Qt5 via the .cmake files in the Qt5 build." FORCE)
+	endif()
+	
+endif()
+
+#########################################################################################
+
 if(WIN32)
 	OPTION( SYSTEM_FORCE_CONSOLE_WINDOW "Make all programs console applications for debugging purposes." OFF)
 endif(WIN32)
