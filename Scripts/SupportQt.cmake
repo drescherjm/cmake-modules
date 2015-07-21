@@ -26,20 +26,22 @@ endif()
 #########################################################################################
 
 function( find_qt5_packages )
-	foreach(MODULE ${QT_MODULES}) 
-		if ( NOT TARGET ${MODULE} ) 
+	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+		foreach(MODULE ${QT_MODULES}) 
+			if ( NOT TARGET ${MODULE} ) 
+			
+				STRING( REPLACE ":" "" COMPONENT ${MODULE})
+				message( STATUS "Looking for module: ${MODULE} ${COMPONENT}")
+				
+				find_package(${COMPONENT} REQUIRED ${QT_CMAKE_PATH})
+				include_directories(${${COMPONENT}_INCLUDE_DIRS})
+				add_definitions(${${COMPONENT}_DEFINITIONS})
+							
+			endif()
+		endforeach()
+	else()
 		
-			STRING( REPLACE ":" "" COMPONENT ${MODULE})
-			message( STATUS "Looking for module: ${MODULE} ${COMPONENT}")
-			
-			find_package(${COMPONENT} REQUIRED ${QT_CMAKE_PATH})
-			include_directories(${${COMPONENT}_INCLUDE_DIRS})
-			add_definitions(${${COMPONENT}_DEFINITIONS})
-			
-			
-			
-		endif()
-	endforeach()
+	endif(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
 endfunction( find_qt5_packages )
 
 #########################################################################################
