@@ -43,41 +43,79 @@ if (GET_RUNTIME)
 
 	IF (WIN32)
 		
-		# Get the list of Qt components.
-		set( QT_COMPONENTS QtCore )
-		foreach(LIB ${QT_MODULES})
-			string( TOUPPER ${LIB} _COMPONENT )
-			if ( QT_USE_${_COMPONENT} ) 
-				list(APPEND QT_COMPONENTS ${LIB})
-			endif()
-		endforeach(LIB)
+		if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+		
+			#get_target_property(QtCore_LOCATION Qt5::Core LINK_DEPENDS)
+			get_target_property(QtCore_LOCATION Qt5::Core LOCATION_DEBUG)
+			message( STATUS Qt5  "${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${QtCore_LOCATION}" )
+							
+			# Add each component to the list of runtime files
+			FOREACH(MODULE ${QT_MODULES})
 			
-		# Add each component to the list of runtime files
-		FOREACH(LIB ${QT_COMPONENTS})
-				if ( DEBUG_GET_QT_RUNTIME )
-					message( STATUS "Adding Qt Runtime file: " ${LIB} )
-				endif (DEBUG_GET_QT_RUNTIME)
-				add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}d${QT_VERSION_MAJOR}.dll" Debug )
-				add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" RelWithDebInfo )
-				add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" Release )
-		ENDFOREACH(LIB)
-		
-		if (QT_USE_QTSQL)
-			foreach(SQLDRIVER ${QT_QTSQL_PLUGINS}) 
-				string( TOUPPER ${SQLDRIVER} _COMPONENT )
-				if ( QT_${_COMPONENT}_PLUGIN_RELEASE )
-					
+					get_target_property(${MODULE}_LOCATION_RELEASE ${MODULE} LOCATION_RELEASE)
+					get_target_property(${MODULE}_LOCATION_DEBUG ${MODULE} LOCATION_DEBUG)
+			
 					if ( DEBUG_GET_QT_RUNTIME )
-						message( STATUS "Found SQL Driver: " ${SQLDRIVER} )
-					endif ( DEBUG_GET_QT_RUNTIME )
+						message( STATUS "Adding Qt Runtime file: " ${MODULE} " - Debug: ${${MODULE}_LOCATION_DEBUG} Release: ${${MODULE}_LOCATION_RELEASE}")
+					endif (DEBUG_GET_QT_RUNTIME)
+					add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_DEBUG}" Debug )
+					add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_RELEASE}" RelWithDebInfo )
+					add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_RELEASE}" Release )
+			ENDFOREACH(MODULE)
+			
+			# if (QT_USE_QTSQL)
+				# foreach(SQLDRIVER ${QT_QTSQL_PLUGINS}) 
+					# string( TOUPPER ${SQLDRIVER} _COMPONENT )
+					# if ( QT_${_COMPONENT}_PLUGIN_RELEASE )
+						
+						# if ( DEBUG_GET_QT_RUNTIME )
+							# message( STATUS "Found SQL Driver: " ${SQLDRIVER} )
+						# endif ( DEBUG_GET_QT_RUNTIME )
+						
+						# add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_DEBUG}" Debug )
+						# add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" RelWithDebInfo )
+						# add_sqldriver_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" Release )
+					# endif()
+				# endforeach(SQLDRIVER)
+			# endif (QT_USE_QTSQL)
+
 					
-					add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_DEBUG}" Debug )
-					add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" RelWithDebInfo )
-					add_sqldriver_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" Release )
+		else()
+			# Get the list of Qt components.
+			set( QT_COMPONENTS QtCore )
+			foreach(LIB ${QT_MODULES})
+				string( TOUPPER ${LIB} _COMPONENT )
+				if ( QT_USE_${_COMPONENT} ) 
+					list(APPEND QT_COMPONENTS ${LIB})
 				endif()
-			endforeach(SQLDRIVER)
-		endif (QT_USE_QTSQL)
-		
+			endforeach(LIB)
+				
+			# Add each component to the list of runtime files
+			FOREACH(LIB ${QT_COMPONENTS})
+					if ( DEBUG_GET_QT_RUNTIME )
+						message( STATUS "Adding Qt Runtime file: " ${LIB} )
+					endif (DEBUG_GET_QT_RUNTIME)
+					add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}d${QT_VERSION_MAJOR}.dll" Debug )
+					add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" RelWithDebInfo )
+					add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_BINARY_DIR}/${LIB}${QT_VERSION_MAJOR}.dll" Release )
+			ENDFOREACH(LIB)
+			
+			if (QT_USE_QTSQL)
+				foreach(SQLDRIVER ${QT_QTSQL_PLUGINS}) 
+					string( TOUPPER ${SQLDRIVER} _COMPONENT )
+					if ( QT_${_COMPONENT}_PLUGIN_RELEASE )
+						
+						if ( DEBUG_GET_QT_RUNTIME )
+							message( STATUS "Found SQL Driver: " ${SQLDRIVER} )
+						endif ( DEBUG_GET_QT_RUNTIME )
+						
+						add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_DEBUG}" Debug )
+						add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" RelWithDebInfo )
+						add_sqldriver_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" Release )
+					endif()
+				endforeach(SQLDRIVER)
+			endif (QT_USE_QTSQL)
+		endif()
 	ENDIF(WIN32)
 endif(GET_RUNTIME)
 
