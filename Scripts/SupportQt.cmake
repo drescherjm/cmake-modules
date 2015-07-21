@@ -25,8 +25,27 @@ endif()
 
 #########################################################################################
 
+function( find_qt5_packages )
+	foreach(MODULE ${QT_MODULES}) 
+		if ( NOT TARGET ${MODULE} ) 
+		
+			STRING( REPLACE ":" "" COMPONENT ${MODULE})
+			message( STATUS "Looking for module: ${MODULE} ${COMPONENT}")
+			
+			find_package(${COMPONENT} REQUIRED ${QT_CMAKE_PATH})
+			include_directories(${${COMPONENT}_INCLUDE_DIRS})
+			add_definitions(${${COMPONENT}_DEFINITIONS})
+			
+			
+			
+		endif()
+	endforeach()
+endfunction( find_qt5_packages )
+
+#########################################################################################
+
 if(WIN32)
-	OPTION( SYSTEM_FORCE_CONSOLE_WINDOW "Make all programs console applications for debugging purposes." OFF)
+	OPTION( SYSTEM_FORCE_CONSOLE_WINDOW "Make all Qt applications console applications for debugging purposes." OFF)
 endif(WIN32)
 
 #########################################################################################
