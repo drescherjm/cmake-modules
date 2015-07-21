@@ -52,6 +52,7 @@ if (GET_RUNTIME)
 			# Add each component to the list of runtime files
 			FOREACH(MODULE ${QT_MODULES})
 			
+					#if (NOT Qt5
 					get_target_property(${MODULE}_LOCATION_RELEASE ${MODULE} LOCATION_RELEASE)
 					get_target_property(${MODULE}_LOCATION_DEBUG ${MODULE} LOCATION_DEBUG)
 			
