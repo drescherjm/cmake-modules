@@ -31,9 +31,9 @@ function( find_qt5_packages )
 			if ( NOT TARGET ${MODULE} ) 
 			
 				STRING( REPLACE ":" "" COMPONENT ${MODULE})
-				message( STATUS "Looking for module: ${MODULE} ${COMPONENT}")
+				message( STATUS "Looking for module: ${MODULE} ${COMPONENT} in ${QT_CMAKE_PATH}")
 				
-				find_package(${COMPONENT} REQUIRED ${QT_CMAKE_PATH})
+				find_package(${COMPONENT} REQUIRED PATHS ${QT_CMAKE_PATH})
 				include_directories(${${COMPONENT}_INCLUDE_DIRS})
 				add_definitions(${${COMPONENT}_DEFINITIONS})
 							
@@ -42,6 +42,13 @@ function( find_qt5_packages )
 	else()
 		
 	endif(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+	
+	
+	
+	get_target_property( MOC_EXE ${Qt5Core_MOC_EXECUTABLE} LOCATION)
+	
+	message( STATUS MOC="${Qt5Core_MOC_EXECUTABLE} ${MOC_EXE}")
+	
 endfunction( find_qt5_packages )
 
 #########################################################################################
