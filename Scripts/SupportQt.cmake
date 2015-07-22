@@ -7,7 +7,7 @@ endif(WIN32)
 #########################################################################################
 
 if ( NOT DEFINED ${${PROJECT_NAME}_QT_VERSION} )
-	if (NOT "$ENV{${QT_VERSION}" STREQUAL "")
+	if (NOT "$ENV{QT_VERSION}" STREQUAL "")
 		set( ENV_QT_VER_MAJOR )
 		set( ENV_QT_VER_MINOR )
 		set( ENV_QT_VER_PATCH )
