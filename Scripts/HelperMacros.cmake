@@ -242,3 +242,22 @@ endif (BUILD_${LOCAL_PROJECT_NAME}_SHARED)
 endmacro(init_lib_shared_static_option)
 
 #########################################################################################
+
+# VERSION_STR_TO_INTS Macro
+# This macro converts a version string into its three integer components.
+#
+# Usage:
+#     VERSION_STR_TO_INTS( major minor patch version )
+#
+# Parameters:
+#     major      The variable to store the major integer component in.
+#     minor      The variable to store the minor integer component in.
+#     patch      The variable to store the patch integer component in.
+#     version    The version string to convert ("#.#.#" format).
+macro( VERSION_STR_TO_INTS major minor patch version )
+
+    string( REGEX REPLACE "([0-9]+).[0-9]+.[0-9]+" "\\1" ${major} ${version} )
+    string( REGEX REPLACE "[0-9]+.([0-9]+).[0-9]+" "\\1" ${minor} ${version} )
+    string( REGEX REPLACE "[0-9]+.[0-9]+.([0-9]+)" "\\1" ${patch} ${version} )
+
+endmacro( VERSION_STR_TO_INTS )
