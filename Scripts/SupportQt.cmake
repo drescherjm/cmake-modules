@@ -175,8 +175,10 @@ endfunction( setup_qt_plugin)
 function( QT45_WRAP_CPP )
 
 	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+		message( STATUS "QT5_WRAP_CPP( ${ARGV} )" )
 		QT5_WRAP_CPP( ${ARGV} )
 	else()
+		message( STATUS "QT4_WRAP_CPP( ${ARGV} )" )
 		QT4_WRAP_CPP( ${ARGV} )
 	endif()
 
