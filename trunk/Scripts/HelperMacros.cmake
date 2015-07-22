@@ -129,7 +129,7 @@ macro( myproject ProjectName )
 	set( LOCAL_PROJECT_NAME ${ProjectName})
 	set( LOCAL_PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 	set( LOCAL_PROJECT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
-	
+
 	set (${LOCAL_PROJECT_NAME}_VERSION_MAJOR ${${PROJECT_NAME}_VERSION_MAJOR})
 	set (${LOCAL_PROJECT_NAME}_VERSION_MINOR ${${PROJECT_NAME}_VERSION_MINOR})
 	set (${LOCAL_PROJECT_NAME}_VERSION_PATCH ${${PROJECT_NAME}_VERSION_PATCH_CLEAN})
@@ -146,7 +146,7 @@ macro( mysubproject ProjectName )
 	set( LOCAL_SUBPROJECT_NAME ${ProjectName})
 	set( LOCAL_SUBPROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 	set( LOCAL_SUBPROJECT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
-		
+			
 endmacro( mysubproject )
 
 #########################################################################################
