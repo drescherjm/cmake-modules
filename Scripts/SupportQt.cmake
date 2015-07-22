@@ -171,3 +171,42 @@ function( setup_qt_plugin PluginTargetName)
 endfunction( setup_qt_plugin)
 
 #########################################################################################
+
+function( QT45_WRAP_CPP )
+
+	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+		QT5_WRAP_CPP( ${ARGV} )
+	else()
+		QT4_WRAP_CPP( ${ARGV} )
+	endif()
+
+endfunction ( QT45_WRAP_CPP )
+
+#########################################################################################
+
+function( QT45_WRAP_UI )
+
+	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+		QT5_WRAP_UI( ${ARGV} )
+	else()
+		QT4_WRAP_UI( ${ARGV} )
+	endif()
+
+endfunction ( QT45_WRAP_UI )
+
+#########################################################################################
+
+function( QT45_ADD_RESOURCES )
+
+	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+		QT5_ADD_RESOURCES( ${ARGV} )
+	else()
+		QT4_ADD_RESOURCES( ${ARGV} )
+	endif()
+
+endfunction ( QT45_ADD_RESOURCES )
+
+#########################################################################################
+
+
+
