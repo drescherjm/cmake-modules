@@ -6,7 +6,26 @@ endif(WIN32)
 
 #########################################################################################
 
-set(${PROJECT_NAME}_QT_VERSION "4" CACHE STRING "Expected Qt version")
+if ( NOT DEFINED ${${PROJECT_NAME}_QT_VERSION} )
+	if (NOT "$ENV{${QT_VERSION}" STREQUAL "")
+		set( ENV_QT_VER_MAJOR )
+		set( ENV_QT_VER_MINOR )
+		set( ENV_QT_VER_PATCH )
+		
+		VERSION_STR_TO_INTS( ENV_QT_VER_MAJOR ENV_QT_VER_MINOR ENV_QT_VER_PATCH $ENV{${QT_VERSION} )
+		
+		if ( (${ENV_QT_VER_MAJOR} EQUAL "4") OR (${ENV_QT_VER_MAJOR} EQUAL "5") ) 
+			set(${PROJECT_NAME}_QT_VERSION ${ENV_QT_VER_MAJOR} CACHE STRING "Expected Qt version")
+		endif()
+		
+	endif()
+	
+	if ( NOT DEFINED ${${PROJECT_NAME}_QT_VERSION} )
+		# We could not get the version from the environment so assume the default is 4..
+		set(${PROJECT_NAME}_QT_VERSION "4" CACHE STRING "Expected Qt version")
+	endif()
+endif()
+
 mark_as_advanced(${PROJECT_NAME}_QT_VERSION)
 
 set_property(CACHE ${PROJECT_NAME}_QT_VERSION PROPERTY STRINGS 4 5)
@@ -173,6 +192,8 @@ endfunction( setup_qt_plugin)
 #########################################################################################
 
 macro( QT45_WRAP_CPP )
+
+	#NOTE: Keep these as macros. functions will not work!
 
 	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
 		#message( STATUS "QT5_WRAP_CPP( ${ARGV} )" )
