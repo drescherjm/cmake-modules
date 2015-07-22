@@ -1,5 +1,11 @@
 #########################################################################################
 
+if(WIN32)
+	OPTION( SYSTEM_FORCE_CONSOLE_WINDOW "Make all Qt applications console applications for debugging purposes." OFF)
+endif(WIN32)
+
+#########################################################################################
+
 set(${PROJECT_NAME}_QT_VERSION "4" CACHE STRING "Expected Qt version")
 mark_as_advanced(${PROJECT_NAME}_QT_VERSION)
 
@@ -50,12 +56,6 @@ function( find_qt5_packages )
 	message( STATUS MOC="${Qt5Core_MOC_EXECUTABLE} ${MOC_EXE}")
 	
 endfunction( find_qt5_packages )
-
-#########################################################################################
-
-if(WIN32)
-	OPTION( SYSTEM_FORCE_CONSOLE_WINDOW "Make all Qt applications console applications for debugging purposes." OFF)
-endif(WIN32)
 
 #########################################################################################
 
@@ -172,21 +172,21 @@ endfunction( setup_qt_plugin)
 
 #########################################################################################
 
-function( QT45_WRAP_CPP )
+macro( QT45_WRAP_CPP )
 
 	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
-		message( STATUS "QT5_WRAP_CPP( ${ARGV} )" )
+		#message( STATUS "QT5_WRAP_CPP( ${ARGV} )" )
 		QT5_WRAP_CPP( ${ARGV} )
 	else()
-		message( STATUS "QT4_WRAP_CPP( ${ARGV} )" )
+		#message( STATUS "QT4_WRAP_CPP( ${ARGV} )" )
 		QT4_WRAP_CPP( ${ARGV} )
 	endif()
 
-endfunction ( QT45_WRAP_CPP )
+endmacro ( QT45_WRAP_CPP )
 
 #########################################################################################
 
-function( QT45_WRAP_UI )
+macro( QT45_WRAP_UI )
 
 	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
 		QT5_WRAP_UI( ${ARGV} )
@@ -194,11 +194,11 @@ function( QT45_WRAP_UI )
 		QT4_WRAP_UI( ${ARGV} )
 	endif()
 
-endfunction ( QT45_WRAP_UI )
+endmacro ( QT45_WRAP_UI )
 
 #########################################################################################
 
-function( QT45_ADD_RESOURCES )
+macro( QT45_ADD_RESOURCES )
 
 	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
 		QT5_ADD_RESOURCES( ${ARGV} )
@@ -206,7 +206,7 @@ function( QT45_ADD_RESOURCES )
 		QT4_ADD_RESOURCES( ${ARGV} )
 	endif()
 
-endfunction ( QT45_ADD_RESOURCES )
+endmacro ( QT45_ADD_RESOURCES )
 
 #########################################################################################
 
