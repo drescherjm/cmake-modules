@@ -38,15 +38,6 @@
 
 ##############
 
-# Add each component so we do not need to set USE variables if the QXT_FIND_COMPONENTS variable is populated.
-if (QXT_FIND_COMPONENTS)
-	string (REPLACE "," ";" QXT_LIB_NAMES ${QXT_FIND_COMPONENTS})
-	FOREACH(component ${QXT_LIB_NAMES})
-	    STRING(TOUPPER ${component} U_MOD)
-		SET(QXT_USE_${U_MOD} TRUE)
-	ENDFOREACH(component)
-endif (QXT_FIND_COMPONENTS)
-
 define_from_environment(QXT_DIR Qxt)
 
 # Look for Qxt in $ENV{CMAKE_SYSTEM_BUILD_ROOT}/Libraries/Qxt-$ENV{QXT_VERSION}
@@ -77,9 +68,19 @@ VERSION_STR_TO_INTS( QXT_VER_MAJOR QXT_VER_MINOR QXT_VER_PATCH $ENV{QXT_VERSION}
 
 if (QXT_VER_MAJOR GREATER 6)
 	SET(QXT_MODULES QxtWidgets QxtWeb QxtZeroConf QxtNetwork QxtSql QxtBerkeley QxtCore)
+	string( REPLACE QxtGui QxtWidgets QXT_FIND_COMPONENTS ${QXT_FIND_COMPONENTS})
 else()
 	SET(QXT_MODULES QxtGui QxtWeb QxtZeroConf QxtNetwork QxtSql QxtBerkeley QxtCore)
 endif()
+
+# Add each component so we do not need to set USE variables if the QXT_FIND_COMPONENTS variable is populated.
+if (QXT_FIND_COMPONENTS)
+	string (REPLACE "," ";" QXT_LIB_NAMES ${QXT_FIND_COMPONENTS})
+	FOREACH(component ${QXT_LIB_NAMES})
+	    STRING(TOUPPER ${component} U_MOD)
+		SET(QXT_USE_${U_MOD} TRUE)
+	ENDFOREACH(component)
+endif (QXT_FIND_COMPONENTS)
 
 SET(QXT_FOUND_MODULES)
 FOREACH(mod ${QXT_MODULES})
