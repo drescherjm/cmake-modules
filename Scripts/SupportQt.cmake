@@ -15,6 +15,7 @@ if ( NOT DEFINED ${${PROJECT_NAME}_QT_VERSION} )
 		VERSION_STR_TO_INTS( ENV_QT_VER_MAJOR ENV_QT_VER_MINOR ENV_QT_VER_PATCH $ENV{QT_VERSION} )
 		
 		if ( (${ENV_QT_VER_MAJOR} EQUAL "4") OR (${ENV_QT_VER_MAJOR} EQUAL "5") ) 
+			message( STATUS "Using environent to set Qt version to ${ENV_QT_VER_MAJOR}" )
 			set(${PROJECT_NAME}_QT_VERSION ${ENV_QT_VER_MAJOR} CACHE STRING "Expected Qt version")
 		endif()
 		
