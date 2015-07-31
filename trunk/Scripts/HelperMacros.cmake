@@ -260,3 +260,16 @@ macro( VERSION_STR_TO_INTS major minor patch version )
     string( REGEX REPLACE "[0-9]+.[0-9]+.([0-9]+)" "\\1" ${patch} ${version} )
 
 endmacro( VERSION_STR_TO_INTS )
+
+#########################################################################################
+
+macro( dump_all_variables )
+
+	get_cmake_property(_variableNames VARIABLES)
+	foreach (_variableName ${_variableNames})
+		message(STATUS "${_variableName}=${${_variableName}}")
+	endforeach()
+
+endmacro( dump_all_variables )
+
+#########################################################################################
