@@ -18,15 +18,15 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 
-IF (NOT SYSTEM_LIBRARY_ROOT)
-	if ($ENV{SYSTEM_LIBRARY_ROOT})
-		string (REPLACE "\\" "/" LIB_ROOT_DIR $ENV{SYSTEM_LIBRARY_ROOT})
+IF (NOT CMAKE_SYSTEM_LIBRARY_ROOT)
+	if ($ENV{CMAKE_SYSTEM_LIBRARY_ROOT})
+		string (REPLACE "\\" "/" LIB_ROOT_DIR $ENV{CMAKE_SYSTEM_LIBRARY_ROOT})
 		MESSAGE( STATUS ${LIB_ROOT_DIR})
-		SET (SYSTEM_LIBRARY_ROOT ${LIB_ROOT_DIR} CACHE PATH "Please set the root path where system libararies are installed.") 
-	else($ENV{SYSTEM_LIBRARY_ROOT})
+		SET (CMAKE_SYSTEM_LIBRARY_ROOT ${LIB_ROOT_DIR} CACHE PATH "Please set the root path where system libararies are installed.") 
+	else($ENV{CMAKE_SYSTEM_LIBRARY_ROOT})
 		# MESSAGE( FATAL_ERROR "Please either set the
-	endif($ENV{SYSTEM_LIBRARY_ROOT})
-ENDIF(NOT SYSTEM_LIBRARY_ROOT)
+	endif($ENV{CMAKE_SYSTEM_LIBRARY_ROOT})
+ENDIF(NOT CMAKE_SYSTEM_LIBRARY_ROOT)
 
 # IF(NOT (QT4_FOUND OR Qt5_FOUND) )
 
@@ -36,7 +36,7 @@ ENDIF(NOT SYSTEM_LIBRARY_ROOT)
 IF( QT4_FOUND )
 	# Is QWT installed? Look for header files
 	FIND_PATH( QWT_INCLUDE_DIR qwt_global.h 
-               PATHS ${QT_INCLUDE_DIR} ${SYSTEM_LIBRARY_ROOT} /usr/local/qwt/include /usr/include/qwt 
+               PATHS ${QT_INCLUDE_DIR} ${CMAKE_SYSTEM_LIBRARY_ROOT} /usr/local/qwt/include /usr/include/qwt 
                PATH_SUFFIXES qwt qwt5 qwt-qt4 qwt5-qt4 qwt-qt3 qwt5-qt3 include qwt/include qwt5/include qwt-qt4/include qwt5-qt4/include qwt-qt3/include qwt5-qt3/include ENV PATH)
 		
 	# Find Qwt version
