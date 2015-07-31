@@ -226,5 +226,18 @@ endmacro ( QT45_ADD_RESOURCES )
 
 #########################################################################################
 
+macro( get_qt_base_dir )
+	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+		if ( NOT TARGET Qt5::Core ) 
+			message( WARNING "Please call get_qt_base_dir after you find Qt" )
+		else()
+			get_target_property(_QtCore_location Qt5::Core LOCATION)
+			get_filename_component(Qt_BASE_DIR "${_QtCore_location}/../../" ABSOLUTE)
+		endif()
+	else()
+		define_from_environment( Qt_BASE_DIR Qt )
+		#message( WARNING "Qt4 support of get_qt_base_dir is not implemented!" )
+	endif()
+endmacro( get_qt_base_dir )
 
-
+#########################################################################################
