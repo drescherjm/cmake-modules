@@ -1,3 +1,4 @@
+option( DEBUG_FIND_WWWIDGETS "Debug the finder module for wwWidgets" OFF)
 
 if (NOT DEFINED CMAKE_SYSTEM_LIBRARY_ROOT)
 	if (NOT "$ENV{CMAKE_SYSTEM_LIBRARY_ROOT}" STREQUAL "")
@@ -45,10 +46,9 @@ if(WIN32)
   string( REPLACE ".lib" ".dll" wwWidgets_LIB_DEBUG_DLL 	"${wwWidgets_LIB_DEBUG}" )
 endif()
 
-dump_all_variables_starting_with( wwWidgets )
-
-message( STATUS CMAKE_SYSTEM_LIBRARY_ROOT=${CMAKE_SYSTEM_LIBRARY_ROOT} )
-message( STATUS wwWidgets_LIB_DEBUG=${wwWidgets_LIB_DEBUG} )
+if (DEBUG_FIND_WWWIDGETS)
+	dump_all_variables_starting_with( wwWidgets )
+endif()
 	
 if ( EXISTS ${wwWidgets_LIB_RELEASE_DLL} )
 	add_library( wwWidgets  SHARED IMPORTED )
@@ -73,9 +73,3 @@ else()
 endif()
 
 set (wwWidgets_LIBRARIES wwWidgets)
-
-# SET (wwWidgets_BINARY_DIR ${QT_BINARY_DIR})
-
-# SET( wwWidgets_INCLUDE_DIR 
-	# ${QT_INCLUDE_DIR}/wwWidgets
-# )
