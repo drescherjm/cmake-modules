@@ -273,3 +273,16 @@ macro( dump_all_variables )
 endmacro( dump_all_variables )
 
 #########################################################################################
+
+macro( dump_all_variables_starting_with Name )
+
+	get_cmake_property(_variableNames VARIABLES)
+	foreach (_variableName ${_variableNames})
+		if ( _variableName MATCHES ^${Name}* )
+			message(STATUS "${_variableName}=${${_variableName}}")
+		endif()
+	endforeach()
+
+endmacro( dump_all_variables_starting_with )
+
+#########################################################################################
