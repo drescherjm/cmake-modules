@@ -55,13 +55,21 @@ if (GET_RUNTIME)
 					#if (NOT Qt5
 					get_target_property(${MODULE}_LOCATION_RELEASE ${MODULE} LOCATION_RELEASE)
 					get_target_property(${MODULE}_LOCATION_DEBUG ${MODULE} LOCATION_DEBUG)
-			
-					if ( DEBUG_GET_QT_RUNTIME )
-						message( STATUS "Adding Qt Runtime file: " ${MODULE} " - Debug: ${${MODULE}_LOCATION_DEBUG} Release: ${${MODULE}_LOCATION_RELEASE}")
-					endif (DEBUG_GET_QT_RUNTIME)
-					add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_DEBUG}" Debug )
-					add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_RELEASE}" RelWithDebInfo )
-					add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_RELEASE}" Release )
+					
+					# Do not add qtmain.lib or any other lib file!
+					if ( NOT ${${MODULE}_LOCATION_DEBUG} MATCHES ".lib$" )
+						if ( DEBUG_GET_QT_RUNTIME )
+							message( STATUS "Adding Qt Runtime file: " ${MODULE} " - Debug: ${${MODULE}_LOCATION_DEBUG} Release: ${${MODULE}_LOCATION_RELEASE}")
+						endif (DEBUG_GET_QT_RUNTIME)
+					
+						add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_DEBUG}" Debug )
+						add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_RELEASE}" RelWithDebInfo )
+						add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_RELEASE}" Release )
+					else()
+						if ( DEBUG_GET_QT_RUNTIME )
+							message( STATUS "Skipping Qt Runtime file: " ${MODULE} " - Debug: ${${MODULE}_LOCATION_DEBUG} Release: ${${MODULE}_LOCATION_RELEASE}")
+						endif (DEBUG_GET_QT_RUNTIME)
+					endif()
 			ENDFOREACH(MODULE)
 			
 			# if (QT_USE_QTSQL)
