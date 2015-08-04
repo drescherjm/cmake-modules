@@ -50,7 +50,7 @@ if (GET_RUNTIME)
 			message( STATUS Qt5  "${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${QtCore_LOCATION}" )
 							
 			# Add each component to the list of runtime files
-			FOREACH(MODULE ${QT_MODULES})
+			foreach(MODULE ${QT_MODULES})
 			
 					#if (NOT Qt5
 					get_target_property(${MODULE}_LOCATION_RELEASE ${MODULE} LOCATION_RELEASE)
@@ -70,8 +70,44 @@ if (GET_RUNTIME)
 							message( STATUS "Skipping Qt Runtime file: " ${MODULE} " - Debug: ${${MODULE}_LOCATION_DEBUG} Release: ${${MODULE}_LOCATION_RELEASE}")
 						endif (DEBUG_GET_QT_RUNTIME)
 					endif()
-			ENDFOREACH(MODULE)
+			endforeach(MODULE)
 			
+			# See if the Qt5::Sql target exists. If so add the sql plugins.
+			if ( TARGET Qt${${PROJECT_NAME}_QT_VERSION}::Sql ) 
+				foreach(SQLDRIVER ${Qt${${PROJECT_NAME}_QT_VERSION}Sql_PLUGINS}) 
+				
+					get_target_property(${SQLDRIVER}_LOCATION_RELEASE ${SQLDRIVER} LOCATION_RELEASE)
+					get_target_property(${SQLDRIVER}_LOCATION_DEBUG ${SQLDRIVER} LOCATION_DEBUG)
+								
+					if ( NOT ${${SQLDRIVER}_LOCATION_RELEASE} EQUAL "" ) 
+						add_sqldriver_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${${SQLDRIVER}_LOCATION_RELEASE}" Release )
+						add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${${SQLDRIVER}_LOCATION_RELEASE}" RelWithDebInfo )
+					endif()
+					
+					if ( NOT ${${SQLDRIVER}_LOCATION_DEBUG} EQUAL "" ) 
+						add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${${SQLDRIVER}_LOCATION_DEBUG}" Debug )
+					endif()
+					
+					if ( DEBUG_GET_QT_RUNTIME )
+						message( STATUS "Found Plugin Debug: ${${SQLDRIVER}_LOCATION_DEBUG} Release: ${${SQLDRIVER}_LOCATION_RELEASE}" )
+					endif()
+					
+					# string( TOUPPER ${SQLDRIVER} _COMPONENT )
+					# if ( QT_${_COMPONENT}_PLUGIN_RELEASE )
+						
+						# if ( DEBUG_GET_QT_RUNTIME )
+							# message( STATUS "Found SQL Driver: " ${SQLDRIVER} )
+						# endif ( DEBUG_GET_QT_RUNTIME )
+						
+						# add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_DEBUG}" Debug )
+						# add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" RelWithDebInfo )
+						# add_sqldriver_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" Release )
+					# endif()
+				endforeach(SQLDRIVER)
+				#message( FATAL_ERROR "Qt${${PROJECT_NAME}_QT_VERSION}::QtSql was found!")
+			endif()
+			
+			#Qt5Sql_PLUGINS
 			# if (QT_USE_QTSQL)
 				# foreach(SQLDRIVER ${QT_QTSQL_PLUGINS}) 
 					# string( TOUPPER ${SQLDRIVER} _COMPONENT )
