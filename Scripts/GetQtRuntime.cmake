@@ -92,39 +92,10 @@ if (GET_RUNTIME)
 						message( STATUS "Found Plugin Debug: ${${SQLDRIVER}_LOCATION_DEBUG} Release: ${${SQLDRIVER}_LOCATION_RELEASE}" )
 					endif()
 					
-					# string( TOUPPER ${SQLDRIVER} _COMPONENT )
-					# if ( QT_${_COMPONENT}_PLUGIN_RELEASE )
-						
-						# if ( DEBUG_GET_QT_RUNTIME )
-							# message( STATUS "Found SQL Driver: " ${SQLDRIVER} )
-						# endif ( DEBUG_GET_QT_RUNTIME )
-						
-						# add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_DEBUG}" Debug )
-						# add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" RelWithDebInfo )
-						# add_sqldriver_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" Release )
-					# endif()
 				endforeach(SQLDRIVER)
-				#message( FATAL_ERROR "Qt${${PROJECT_NAME}_QT_VERSION}::QtSql was found!")
+	
 			endif()
-			
-			#Qt5Sql_PLUGINS
-			# if (QT_USE_QTSQL)
-				# foreach(SQLDRIVER ${QT_QTSQL_PLUGINS}) 
-					# string( TOUPPER ${SQLDRIVER} _COMPONENT )
-					# if ( QT_${_COMPONENT}_PLUGIN_RELEASE )
-						
-						# if ( DEBUG_GET_QT_RUNTIME )
-							# message( STATUS "Found SQL Driver: " ${SQLDRIVER} )
-						# endif ( DEBUG_GET_QT_RUNTIME )
-						
-						# add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_DEBUG}" Debug )
-						# add_qt_sqldriver_file( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" RelWithDebInfo )
-						# add_sqldriver_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QT_${_COMPONENT}_PLUGIN_RELEASE}" Release )
-					# endif()
-				# endforeach(SQLDRIVER)
-			# endif (QT_USE_QTSQL)
-
-					
+								
 		else()
 			# Get the list of Qt components.
 			set( QT_COMPONENTS QtCore )
