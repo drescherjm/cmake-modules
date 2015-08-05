@@ -54,24 +54,24 @@ if (NOT DEFINED ${QXT_DIR} OR ${QXT_DIR} STREQUAL "")
 		endif(NOT "$ENV{QXT_VERSION}" STREQUAL "")
 	endif(NOT "$ENV{CMAKE_SYSTEM_BUILD_ROOT}" STREQUAL "")
 	
+	if (NOT DEFINED VERSION_STR_TO_INTS)
+		Include(${PROJECT_SOURCE_DIR}/CMake/External/Scripts/HelperMacros.cmake)
+	endif()
+
+	set( QXT_VER_MAJOR )
+	set( QXT_VER_MINOR )
+	set( QXT_VER_PATCH )
+
+	VERSION_STR_TO_INTS( QXT_VER_MAJOR QXT_VER_MINOR QXT_VER_PATCH $ENV{QXT_VERSION} )
+
+	if (QXT_VER_MAJOR GREATER 6)
+		SET(QXT_MODULES QxtWidgets QxtWeb QxtZeroConf QxtNetwork QxtSql QxtBerkeley QxtCore)
+		string( REPLACE QxtGui QxtWidgets QXT_FIND_COMPONENTS ${QXT_FIND_COMPONENTS})
+	else()
+		SET(QXT_MODULES QxtGui QxtWeb QxtZeroConf QxtNetwork QxtSql QxtBerkeley QxtCore)
+	endif()
+
 endif(NOT DEFINED ${QXT_DIR} OR ${QXT_DIR} STREQUAL "")
-
-if (NOT DEFINED VERSION_STR_TO_INTS)
-	Include(${PROJECT_SOURCE_DIR}/CMake/External/Scripts/HelperMacros.cmake)
-endif()
-
-set( QXT_VER_MAJOR )
-set( QXT_VER_MINOR )
-set( QXT_VER_PATCH )
-
-VERSION_STR_TO_INTS( QXT_VER_MAJOR QXT_VER_MINOR QXT_VER_PATCH $ENV{QXT_VERSION} )
-
-if (QXT_VER_MAJOR GREATER 6)
-	SET(QXT_MODULES QxtWidgets QxtWeb QxtZeroConf QxtNetwork QxtSql QxtBerkeley QxtCore)
-	string( REPLACE QxtGui QxtWidgets QXT_FIND_COMPONENTS ${QXT_FIND_COMPONENTS})
-else()
-	SET(QXT_MODULES QxtGui QxtWeb QxtZeroConf QxtNetwork QxtSql QxtBerkeley QxtCore)
-endif()
 
 # Add each component so we do not need to set USE variables if the QXT_FIND_COMPONENTS variable is populated.
 if (QXT_FIND_COMPONENTS)
