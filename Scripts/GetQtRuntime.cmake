@@ -39,6 +39,72 @@ if (GET_RUNTIME)
 		
 	endmacro( add_sqldriver_file_for_packaging )
 	
+#########################################################################################
+
+	macro( add_qt_plugin_file BatchFileName RuntimeFile Release )
+
+		GET_FILENAME_COMPONENT( BatchFile ${BatchFileName} NAME_WE )
+		
+		#The following will truncate the file on the first call to add_qt_plugin_file.
+		if ( NOT DEFINED __add_runtime_file_${BatchFile}__ ) 
+			set ( __add_runtime_file_${BatchFile}__ 1)
+			file( WRITE ${BatchFileName} "REM This file will copy the runtimes to the Debug and Release binary folders\n" )
+		endif ( NOT DEFINED __add_runtime_file_${BatchFile}__)
+		
+		message( STATUS "CREATING ${EXECUTABLE_OUTPUT_PATH}/${Release}/plugins")
+		file( MAKE_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}/${Release}/plugins" )
+		#The following line will add the entry in the batch file for copying the Runtime file to the folder ${PROJECT_BINARY_DIR}/${Release}/
+		file( APPEND ${BatchFileName} "@\"${CMAKE_COMMAND}\" -E copy_if_different \"${RuntimeFile}\" \"${EXECUTABLE_OUTPUT_PATH}/${Release}/plugins/\"\n" )
+		
+	endmacro( add_qt_plugin_file )
+	
+#########################################################################################
+
+	macro( add_qt_plugin_file_for_packaging BatchFileName RuntimeFile Release )
+		
+		add_qt_plugin_file( ${BatchFileName} ${RuntimeFile} ${Release} )
+		#SET( ${PROJECT_NAME}_RELEASE_RUNTIME  ${${PROJECT_NAME}_RELEASE_RUNTIME} ${RuntimeFile} )
+		
+		INSTALL(FILES ${RuntimeFile}
+			DESTINATION bin/plugins
+			COMPONENT Applications
+		)
+		
+	endmacro( add_qt_plugin_file_for_packaging )
+	
+#########################################################################################
+
+	macro( add_qt_platform_file BatchFileName RuntimeFile Release )
+
+		GET_FILENAME_COMPONENT( BatchFile ${BatchFileName} NAME_WE )
+		
+		#The following will truncate the file on the first call to add_qt_plugin_file.
+		if ( NOT DEFINED __add_runtime_file_${BatchFile}__ ) 
+			set ( __add_runtime_file_${BatchFile}__ 1)
+			file( WRITE ${BatchFileName} "REM This file will copy the runtimes to the Debug and Release binary folders\n" )
+		endif ( NOT DEFINED __add_runtime_file_${BatchFile}__)
+		
+		message( STATUS "CREATING ${EXECUTABLE_OUTPUT_PATH}/${Release}/platforms")
+		file( MAKE_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}/${Release}/platforms" )
+		#The following line will add the entry in the batch file for copying the Runtime file to the folder ${PROJECT_BINARY_DIR}/${Release}/
+		file( APPEND ${BatchFileName} "@\"${CMAKE_COMMAND}\" -E copy_if_different \"${RuntimeFile}\" \"${EXECUTABLE_OUTPUT_PATH}/${Release}/platforms/\"\n" )
+		
+	endmacro( add_qt_platform_file )
+	
+#########################################################################################
+
+	macro( add_qt_platform_file_for_packaging BatchFileName RuntimeFile Release )
+		
+		add_qt_platform_file( ${BatchFileName} ${RuntimeFile} ${Release} )
+		#SET( ${PROJECT_NAME}_RELEASE_RUNTIME  ${${PROJECT_NAME}_RELEASE_RUNTIME} ${RuntimeFile} )
+		
+		INSTALL(FILES ${RuntimeFile}
+			DESTINATION bin/platforms
+			COMPONENT Applications
+		)
+		
+	endmacro( add_qt_platform_file_for_packaging )
+	
 #########################################################################################	
 
 	IF (WIN32)
@@ -65,6 +131,52 @@ if (GET_RUNTIME)
 						add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_DEBUG}" Debug )
 						add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_RELEASE}" RelWithDebInfo )
 						add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_RELEASE}" Release )
+						
+					else()
+						if ( DEBUG_GET_QT_RUNTIME )
+							message( STATUS "Skipping Qt Runtime file: " ${MODULE} " - Debug: ${${MODULE}_LOCATION_DEBUG} Release: ${${MODULE}_LOCATION_RELEASE}")
+						endif (DEBUG_GET_QT_RUNTIME)
+					endif()
+			endforeach(MODULE)
+			
+			
+			foreach(MODULE ${QT_PLUGIN_MODULES})
+			
+					#if (NOT Qt5
+					get_target_property(${MODULE}_LOCATION_RELEASE ${MODULE} LOCATION_RELEASE)
+					get_target_property(${MODULE}_LOCATION_DEBUG ${MODULE} LOCATION_DEBUG)
+					
+					# Do not add qtmain.lib or any other lib file!
+					if ( NOT ${${MODULE}_LOCATION_DEBUG} MATCHES ".lib$" )
+						if ( DEBUG_GET_QT_RUNTIME )
+							message( STATUS "Adding Qt Runtime file: " ${MODULE} " - Debug: ${${MODULE}_LOCATION_DEBUG} Release: ${${MODULE}_LOCATION_RELEASE}")
+						endif (DEBUG_GET_QT_RUNTIME)
+					
+						add_qt_plugin_file( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_DEBUG}" Debug )
+						add_qt_plugin_file( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_RELEASE}" RelWithDebInfo )
+						add_qt_plugin_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_RELEASE}" Release )
+					else()
+						if ( DEBUG_GET_QT_RUNTIME )
+							message( STATUS "Skipping Qt Runtime file: " ${MODULE} " - Debug: ${${MODULE}_LOCATION_DEBUG} Release: ${${MODULE}_LOCATION_RELEASE}")
+						endif (DEBUG_GET_QT_RUNTIME)
+					endif()
+			endforeach(MODULE)
+						
+			foreach(MODULE ${QT_PLATFORM_MODULES})
+			
+					#if (NOT Qt5
+					get_target_property(${MODULE}_LOCATION_RELEASE ${MODULE} LOCATION_RELEASE)
+					get_target_property(${MODULE}_LOCATION_DEBUG ${MODULE} LOCATION_DEBUG)
+					
+					# Do not add qtmain.lib or any other lib file!
+					if ( NOT ${${MODULE}_LOCATION_DEBUG} MATCHES ".lib$" )
+						if ( DEBUG_GET_QT_RUNTIME )
+							message( STATUS "Adding Qt Runtime file: " ${MODULE} " - Debug: ${${MODULE}_LOCATION_DEBUG} Release: ${${MODULE}_LOCATION_RELEASE}")
+						endif (DEBUG_GET_QT_RUNTIME)
+					
+						add_qt_platform_file( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_DEBUG}" Debug )
+						add_qt_platform_file( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_RELEASE}" RelWithDebInfo )
+						add_qt_platform_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${${MODULE}_LOCATION_RELEASE}" Release )
 					else()
 						if ( DEBUG_GET_QT_RUNTIME )
 							message( STATUS "Skipping Qt Runtime file: " ${MODULE} " - Debug: ${${MODULE}_LOCATION_DEBUG} Release: ${${MODULE}_LOCATION_RELEASE}")
