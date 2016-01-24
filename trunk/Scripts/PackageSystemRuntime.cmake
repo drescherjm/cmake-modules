@@ -33,4 +33,14 @@ macro ( PackageSystemRuntime Component )
 		INSTALL(PROGRAMS ${MSVC_REDIST} COMPONENT ${Component} DESTINATION bin)
 		set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "ExecWait '\\\"$INSTDIR\\\\bin\\\\${vcredist_name}\\\"'")
 	endif(MSVC12)
+	if(MSVC14)
+		find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}.exe
+		  PATHS
+		  "$ENV{ProgramW6432}/Microsoft Visual Studio 14.0/VC/redist/1033/"
+		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio 14.0/VC/redist/1033/"
+		  )
+		GET_FILENAME_COMPONENT(vcredist_name "${MSVC_REDIST}" NAME)
+		INSTALL(PROGRAMS ${MSVC_REDIST} COMPONENT ${Component} DESTINATION bin)
+		set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "ExecWait '\\\"$INSTDIR\\\\bin\\\\${vcredist_name}\\\"'")
+	endif(MSVC14)
 endmacro(PackageSystemRuntime)
