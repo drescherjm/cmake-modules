@@ -1,7 +1,7 @@
 OPTION(DEBUG_COMPILER_VERSION "Debug the compiler version determinarion" OFF)
 
 cmake_policy(PUSH)
-cmake_policy(SET CMP0054 OLD)
+cmake_policy(SET CMP0054 NEW)
 
 if ( (NOT DEFINED PROJECT_COMPILER_VERSION) OR ("${PROJECT_COMPILER_VERSION}" STREQUAL "") )
 
