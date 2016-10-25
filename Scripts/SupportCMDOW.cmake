@@ -8,7 +8,7 @@ if(WIN32)
 		if ( (${CMDOW_EXECUTABLE} MATCHES "RUNJOBS_EXECUTABLE_NOTFOUND") OR (NOT EXISTS ${CMDOW_EXECUTABLE}) )
 			message( FATAL_ERROR "Please set the location of the cmdow executable or disable the cmdow feature." )
 		endif ( (${CMDOW_EXECUTABLE} MATCHES "RUNJOBS_EXECUTABLE_NOTFOUND") OR (NOT EXISTS ${CMDOW_EXECUTABLE}))
-		
+			
 	endif( USE_CMDOW_TO_MANIPULATE_NETSERVER_WINDOWS )
 	
 endif(WIN32)
