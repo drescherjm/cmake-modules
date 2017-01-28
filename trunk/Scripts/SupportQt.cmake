@@ -169,6 +169,29 @@ endfunction( setup_qt_executable )
 
 #########################################################################################
 
+function( install_qt_designer_plugin PluginTargetName)
+
+	#Install the designer plugin
+	if(QT_PLUGINS_DIR)
+	  # Legacy FindQt4.
+	  install(TARGETS ${PluginTargetName}
+		RUNTIME DESTINATION "${QT_PLUGINS_DIR}/designer"
+	  )
+	else()
+	  # Call qmake to query the plugin installation directory.
+	  get_target_property(QT_QMAKE_EXECUTABLE Qt5::qmake LOCATION)
+	  execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PLUGINS
+		OUTPUT_VARIABLE QT_INSTALL_PLUGINS OUTPUT_STRIP_TRAILING_WHITESPACE
+	  )
+	  install(TARGETS ${PluginTargetName}
+		RUNTIME DESTINATION "${QT_INSTALL_PLUGINS}/designer"
+	  )
+	endif()
+
+endfunction(install_qt_designer_plugin)
+
+#########################################################################################
+
 function( setup_qt_plugin PluginTargetName)
 	set_target_properties(${PluginTargetName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/bin/Debug/plugins)
 	set_target_properties(${PluginTargetName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin/Release/plugins)
