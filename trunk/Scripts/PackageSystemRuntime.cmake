@@ -1,4 +1,7 @@
 macro ( PackageSystemRuntime Component )
+
+	 set(MY_PFX86 "PROGRAMFILES(X86)") 
+
 	if(MSVC10)
 		find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}/vcredist_${CMAKE_MSVC_ARCH}.exe
 		  PATHS
@@ -24,10 +27,13 @@ macro ( PackageSystemRuntime Component )
 	endif(MSVC11)
 
 	if(MSVC12)
+	
+		#message( STATUS ARCH=${CMAKE_MSVC_ARCH} $ENV{${MY_PFX86}} )
 		find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}.exe
 		  PATHS
 		  "$ENV{ProgramW6432}/Microsoft Visual Studio 12.0/VC/redist/1033/"
 		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio 12.0/VC/redist/1033/"
+		  "$ENV{${MY_PFX86}}/Microsoft Visual Studio 12.0/VC/redist/1033/"
 		  )
 		GET_FILENAME_COMPONENT(vcredist_name "${MSVC_REDIST}" NAME)
 		INSTALL(PROGRAMS ${MSVC_REDIST} COMPONENT ${Component} DESTINATION bin)
@@ -38,6 +44,7 @@ macro ( PackageSystemRuntime Component )
 		  PATHS
 		  "$ENV{ProgramW6432}/Microsoft Visual Studio 14.0/VC/redist/1033/"
 		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio 14.0/VC/redist/1033/"
+		  "$ENV{${MY_PFX86}}/Microsoft Visual Studio 14.0/VC/redist/1033/"
 		  )
 		GET_FILENAME_COMPONENT(vcredist_name "${MSVC_REDIST}" NAME)
 		INSTALL(PROGRAMS ${MSVC_REDIST} COMPONENT ${Component} DESTINATION bin)
