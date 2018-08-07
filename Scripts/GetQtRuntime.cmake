@@ -86,6 +86,7 @@ if (GET_RUNTIME)
 		
 		message( STATUS "CREATING ${EXECUTABLE_OUTPUT_PATH}/${Release}/platforms")
 		file( MAKE_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}/${Release}/platforms" )
+		
 		#The following line will add the entry in the batch file for copying the Runtime file to the folder ${PROJECT_BINARY_DIR}/${Release}/
 		file( APPEND ${BatchFileName} "@\"${CMAKE_COMMAND}\" -E copy_if_different \"${RuntimeFile}\" \"${EXECUTABLE_OUTPUT_PATH}/${Release}/platforms/\"\n" )
 		
@@ -161,6 +162,11 @@ if (GET_RUNTIME)
 						endif (DEBUG_GET_QT_RUNTIME)
 					endif()
 			endforeach(MODULE)
+			
+			
+			if ( DEBUG_GET_QT_RUNTIME ) 
+				message( STATUS "QT_PLATFORM_MODULES=" ${QT_PLATFORM_MODULES})
+			endif()
 						
 			foreach(MODULE ${QT_PLATFORM_MODULES})
 			
