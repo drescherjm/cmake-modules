@@ -45,6 +45,9 @@ if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
 	if( IS_DIRECTORY ${QT_DIR}/qtbase/lib/cmake ) 
 		#set_property(CACHE QT_CMAKE_PATH PROPERTY PATH ${QT_DIR}/qtbase/lib/cmake)
 		set(QT_CMAKE_PATH ${QT_DIR}/qtbase/lib/cmake CACHE PATH "Set the path to help cmake find Qt5 via the .cmake files in the Qt5 build." FORCE)
+	
+	elseif ( IS_DIRECTORY ${QT_DIR}/lib/cmake ) 
+		set(QT_CMAKE_PATH ${QT_DIR}/lib/cmake CACHE PATH "Set the path to help cmake find Qt5 via the .cmake files in the Qt5 build." FORCE)
 	endif()
 	
 endif()
