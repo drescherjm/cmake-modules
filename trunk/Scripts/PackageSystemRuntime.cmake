@@ -40,14 +40,24 @@ macro ( PackageSystemRuntime Component )
 		set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "ExecWait '\\\"$INSTDIR\\\\bin\\\\${vcredist_name}\\\"'")
 	endif(MSVC12)
 	if(MSVC14)
-		if(MSVC_VERSION GREATER_EQUAL 1910)
+		if(MSVC_VERSION GREATER_EQUAL 1920 AND MSVC_VERSION LESS 1930)
 		find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}.exe
 		  PATHS
+		  "$ENV{ProgramW6432}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.20.27508/"
+		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.20.27508/"
+		  "$ENV{${MY_PFX86}}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.20.27508/"
+		  )
+		elseif(MSVC_VERSION GREATER_EQUAL 1910 AND MSVC_VERSION LESS 1920)
+		find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}.exe
+		  PATHS
+		  "$ENV{ProgramW6432}/Microsoft Visual Studio/2017/Community/VC/Redist/MSVC/14.16.27012/"
+		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio/2017/Community/VC/Redist/MSVC/14.16.27012/"
+		  "$ENV{${MY_PFX86}}/Microsoft Visual Studio/2017/Community/VC/Redist/MSVC/14.16.27012/"
 		  "$ENV{ProgramW6432}/Microsoft Visual Studio/2017/Community/VC/Redist/MSVC/14.14.26405/"
 		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio/2017/Community/VC/Redist/MSVC/14.14.26405/"
 		  "$ENV{${MY_PFX86}}/Microsoft Visual Studio/2017/Community/VC/Redist/MSVC/14.14.26405/"
 		  )
-		else()
+		elseif(MSVC_VERSION GREATER_EQUAL 1900 AND MSVC_VERSION LESS 1910)
 		find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}.exe
 		  PATHS
 		  "$ENV{ProgramW6432}/Microsoft Visual Studio 14.0/VC/redist/1033/"
