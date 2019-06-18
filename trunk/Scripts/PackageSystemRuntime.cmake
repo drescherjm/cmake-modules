@@ -1,7 +1,10 @@
 macro ( PackageSystemRuntime Component )
 
 	 set(MY_PFX86 "PROGRAMFILES(X86)") 
-
+	 
+	# MESSAGE( STATUS MSVC_VERSION=${MSVC_VERSION} )
+	# MESSAGE( STATUS CMAKE_CXX_COMPILER_VERSION=${CMAKE_CXX_COMPILER_VERSION} )
+	 
 	if(MSVC10)
 		find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}/vcredist_${CMAKE_MSVC_ARCH}.exe
 		  PATHS
@@ -46,6 +49,9 @@ macro ( PackageSystemRuntime Component )
 		  "$ENV{ProgramW6432}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.20.27508/"
 		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.20.27508/"
 		  "$ENV{${MY_PFX86}}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.20.27508/"
+		  "$ENV{ProgramW6432}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.21.27702/"
+		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.21.27702/"
+		  "$ENV{${MY_PFX86}}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.21.27702/"
 		  )
 		elseif(MSVC_VERSION GREATER_EQUAL 1910 AND MSVC_VERSION LESS 1920)
 		find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}.exe
