@@ -1,10 +1,11 @@
 macro ( PackageSystemRuntime Component )
 
 	 set(MY_PFX86 "PROGRAMFILES(X86)") 
-	 
+	 	 
 	# MESSAGE( STATUS MSVC_VERSION=${MSVC_VERSION} )
 	# MESSAGE( STATUS CMAKE_CXX_COMPILER_VERSION=${CMAKE_CXX_COMPILER_VERSION} )
-	 
+		 
+	# MESSAGE( STATUS CMAKE_VS_PLATFORM_TOOLSET_VERSION=${CMAKE_VS_PLATFORM_TOOLSET_VERSION} )
 	if(MSVC10)
 		find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}/vcredist_${CMAKE_MSVC_ARCH}.exe
 		  PATHS
@@ -44,14 +45,26 @@ macro ( PackageSystemRuntime Component )
 	endif(MSVC12)
 	if(MSVC14)
 		if(MSVC_VERSION GREATER_EQUAL 1920 AND MSVC_VERSION LESS 1930)
-		find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}.exe
+			# Determine redist folder that has the current build of visual studio
+			# As of 20190618 this is: 14.21.27702
+		
+			STRING( SUBSTRING ${MSVC_VERSION} 2 2 REDIST_VS_REV )
+			STRING( SUBSTRING ${CMAKE_CXX_COMPILER_VERSION} 6 5 REDIST_VS_BUILD )
+			SET (REDIST_VERSION 14.${REDIST_VS_REV}.${REDIST_VS_BUILD})
+	 
+			# MESSAGE( STATUS REDIST_VS_REV=${REDIST_VS_REV} )
+			# MESSAGE( STATUS REDIST_VS_BUILD=${REDIST_VS_BUILD} )
+	 
+			# MESSAGE( STATUS REDIST_VERSION=${REDIST_VERSION} )
+			
+	    find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}.exe
 		  PATHS
 		  "$ENV{ProgramW6432}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.20.27508/"
 		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.20.27508/"
 		  "$ENV{${MY_PFX86}}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.20.27508/"
-		  "$ENV{ProgramW6432}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.21.27702/"
-		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.21.27702/"
-		  "$ENV{${MY_PFX86}}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.21.27702/"
+		  "$ENV{ProgramW6432}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/${REDIST_VERSION}/"
+		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/${REDIST_VERSION}/"
+		  "$ENV{${MY_PFX86}}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/${REDIST_VERSION}/"
 		  )
 		elseif(MSVC_VERSION GREATER_EQUAL 1910 AND MSVC_VERSION LESS 1920)
 		find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}.exe
