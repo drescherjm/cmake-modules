@@ -59,6 +59,9 @@ macro ( PackageSystemRuntime Component )
 			
 	    find_program(MSVC_REDIST NAMES vcredist_${CMAKE_MSVC_ARCH}.exe
 		  PATHS
+		  "$ENV{ProgramW6432}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.22.27821/"
+		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.22.27821/"
+		  "$ENV{${MY_PFX86}}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.22.27821/"
 		  "$ENV{ProgramW6432}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.20.27508/"
 		  "$ENV{PROGRAMFILES}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.20.27508/"
 		  "$ENV{${MY_PFX86}}/Microsoft Visual Studio/2019/Community/VC/Redist/MSVC/14.20.27508/"
