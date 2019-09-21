@@ -40,6 +40,38 @@
 
 define_from_environment(QXT_DIR Qxt)
 
+if (VCPKG_TARGET_TRIPLET) 
+	if (NOT QXT_VERSION)
+		find_path(QXT_INCLUDE_DIR
+			NAMES
+				qxtversion.h
+			HINTS
+				${_QXT_INCLUDEDIR}
+				${_QXT_ROOT_HINTS_AND_PATHS}
+			PATH_SUFFIXES
+				include
+				"include/qxt"
+		)	
+	
+		if (EXISTS "${QXT_INCLUDE_DIR}/qxtversion.h")
+			file(READ "${QXT_INCLUDE_DIR}/qxtversion.h" QXT_VERSION_CONTENT)
+
+			string(REGEX MATCH "#define +QXT_VER_MAJOR +([0-9]+)" _dummy "${QXT_VERSION_CONTENT}")
+			set(QXT_VER_MAJOR "${CMAKE_MATCH_1}")
+
+			string(REGEX MATCH "#define +QXT_VER_MINOR +([0-9]+)" _dummy "${QXT_VERSION_CONTENT}")
+			set(QXT_VER_MINOR "${CMAKE_MATCH_1}")
+
+			string(REGEX MATCH "#define +QXT_VER_PATCH +([0-9]+)" _dummy "${QXT_VERSION_CONTENT}")
+			set(QXT_VER_PATCH "${CMAKE_MATCH_1}")
+
+			set(QXT_VERSION "${QXT_VER_MAJOR}.${QXT_VER_MINOR}.${QXT_VER_PATCH}")
+			set(QXT_VERSION_STRING QXT_VERSION)
+			
+		endif ()
+	endif()
+endif()
+
 if ( (NOT DEFINED QXT_FIND_COMPONENTS) OR ("${QXT_FIND_COMPONENTS}" STREQUAL ""))
 	message( FATAL_ERROR "Please populate QXT_FIND_COMPONENTS before find_package(Qxt REQUIRED)")
 endif()
@@ -61,21 +93,23 @@ if (NOT DEFINED ${QXT_DIR} OR ${QXT_DIR} STREQUAL "")
 	if (NOT DEFINED VERSION_STR_TO_INTS)
 		Include(${PROJECT_SOURCE_DIR}/CMake/External/Scripts/HelperMacros.cmake)
 	endif()
+endif(NOT DEFINED ${QXT_DIR} OR ${QXT_DIR} STREQUAL "")
 
+if ("${QXT_VER_MAJOR}" STREQUAL "")
 	set( QXT_VER_MAJOR )
 	set( QXT_VER_MINOR )
 	set( QXT_VER_PATCH )
 
 	VERSION_STR_TO_INTS( QXT_VER_MAJOR QXT_VER_MINOR QXT_VER_PATCH $ENV{QXT_VERSION} )
+endif()
 
-	if (QXT_VER_MAJOR GREATER 6)
-		SET(QXT_MODULES QxtWidgets QxtWeb QxtZeroConf QxtNetwork QxtSql QxtBerkeley QxtCore)
-		string( REPLACE QxtGui QxtWidgets QXT_FIND_COMPONENTS ${QXT_FIND_COMPONENTS})
-	else()
-		SET(QXT_MODULES QxtGui QxtWeb QxtZeroConf QxtNetwork QxtSql QxtBerkeley QxtCore)
-	endif()
-
-endif(NOT DEFINED ${QXT_DIR} OR ${QXT_DIR} STREQUAL "")
+if (QXT_VER_MAJOR GREATER 6)
+	SET(QXT_MODULES QxtWidgets QxtWeb QxtZeroConf QxtNetwork QxtSql QxtBerkeley QxtCore)
+	string( REPLACE QxtGui QxtWidgets QXT_FIND_COMPONENTS ${QXT_FIND_COMPONENTS})
+else()
+	message( FATAL_ERROR QXT_VER_MAJOR=${QXT_VER_MAJOR})
+	SET(QXT_MODULES QxtGui QxtWeb QxtZeroConf QxtNetwork QxtSql QxtBerkeley QxtCore)
+endif()
 
 # Add each component so we do not need to set USE variables if the QXT_FIND_COMPONENTS variable is populated.
 if (QXT_FIND_COMPONENTS)
@@ -114,6 +148,24 @@ FIND_PATH(QXT_BINARY_DIR
 	NO_DEFAULT_PATH
 )
 
+FIND_PATH(QXT_BINARY_DIR_RELEASE 
+	NAMES QxtCore${CMAKE_SHARED_LIBRARY_SUFFIX}
+	PATHS 
+	${QXT_DIR}/bin  
+	${QXT_DIR}/Bin 
+)
+
+FIND_PATH(QXT_BINARY_DIR_DEBUG 
+	NAMES QxtCored${CMAKE_SHARED_LIBRARY_SUFFIX}
+	PATHS 
+	${QXT_DIR}/bin  
+	${QXT_DIR}/Bin 
+)
+
+# dump_all_variables()
+
+#message(FATAL_ERROR QXT_BINARY_DIR_RELEASE=${QXT_BINARY_DIR_RELEASE} QxtCore${CMAKE_SHARED_LIBRARY_SUFFIX})
+
 #SET(QXT_BINARY_DIR "${QXT_DIR}/bin" CACHE PATH "${QXT_DIR}/bin")
 
 FOREACH(mod ${QXT_MODULES})
@@ -132,6 +184,7 @@ FOREACH(mod ${QXT_MODULES})
 		"C:\\"
 		"C:\\Program Files\\"
 		"C:\\Program Files(x86)\\"
+		${QXT_INCLUDE_DIR}/include
 		${QXT_DIR}
 		NO_DEFAULT_PATH
 	)
@@ -167,6 +220,8 @@ FOREACH(mod ${QXT_MODULES})
 	)
 	IF (QXT_${U_MOD}_LIB_RELEASE)
 		SET(QXT_FOUND_MODULES "${QXT_FOUND_MODULES} ${mod}")
+	else()
+		message(STATUS "Could not find ${mod}")
 	ENDIF (QXT_${U_MOD}_LIB_RELEASE)
 
 	IF (QXT_${U_MOD}_LIB_DEBUG)
