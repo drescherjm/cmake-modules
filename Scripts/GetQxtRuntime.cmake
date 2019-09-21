@@ -3,6 +3,8 @@
 # and CPack code to support installer generation.
 # --------------------------------------------------------------------
 
+dump_all_variables()
+
 if (GET_RUNTIME)
 	if (WIN32)
 		if (QXT_FIND_COMPONENTS) 
@@ -11,9 +13,9 @@ if (GET_RUNTIME)
 		
 			string (REPLACE "," ";" QXT_LIB_NAMES ${QXT_FIND_COMPONENTS})
 			FOREACH(LIB  ${QXT_LIB_NAMES})
-					add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QXT_BINARY_DIR}/${LIB}d.dll" Debug )
-					add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QXT_BINARY_DIR}/${LIB}.dll" RelWithDebInfo )
-					add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QXT_BINARY_DIR}/${LIB}.dll" Release )
+					add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QXT_BINARY_DIR_DEBUG}/${LIB}d.dll" Debug )
+					add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QXT_BINARY_DIR_RELEASE}/${LIB}.dll" RelWithDebInfo )
+					add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QXT_BINARY_DIR_RELEASE}/${LIB}.dll" Release )
 			ENDFOREACH(LIB)
 		endif()
 	endif()
