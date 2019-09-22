@@ -28,12 +28,7 @@ IF (NOT CMAKE_SYSTEM_LIBRARY_ROOT)
 	endif($ENV{CMAKE_SYSTEM_LIBRARY_ROOT})
 ENDIF(NOT CMAKE_SYSTEM_LIBRARY_ROOT)
 
-# IF(NOT (QT4_FOUND OR Qt5_FOUND) )
-
-	# FIND_PACKAGE( Qt4 REQUIRED QUIET )
-# ENDIF(NOT QT4_FOUND)
-
-IF( QT4_FOUND )
+IF( QT4_FOUND OR Qt5_FOUND )
 	# Is QWT installed? Look for header files
 	FIND_PATH( QWT_INCLUDE_DIR qwt_global.h 
                PATHS ${QT_INCLUDE_DIR} ${CMAKE_SYSTEM_LIBRARY_ROOT} /usr/local/qwt/include /usr/include/qwt 
@@ -166,4 +161,4 @@ IF( QT4_FOUND )
       		MESSAGE(FATAL_ERROR "Could not find Qwt")
    	ENDIF (NOT QWT_FOUND )
 
-ENDIF( QT4_FOUND )
+endif()
