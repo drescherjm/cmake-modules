@@ -107,7 +107,6 @@ if (QXT_VER_MAJOR GREATER 6)
 	SET(QXT_MODULES QxtWidgets QxtWeb QxtZeroConf QxtNetwork QxtSql QxtBerkeley QxtCore)
 	string( REPLACE QxtGui QxtWidgets QXT_FIND_COMPONENTS ${QXT_FIND_COMPONENTS})
 else()
-	message( FATAL_ERROR QXT_VER_MAJOR=${QXT_VER_MAJOR})
 	SET(QXT_MODULES QxtGui QxtWeb QxtZeroConf QxtNetwork QxtSql QxtBerkeley QxtCore)
 endif()
 
