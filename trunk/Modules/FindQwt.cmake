@@ -28,11 +28,13 @@ IF (NOT CMAKE_SYSTEM_LIBRARY_ROOT)
 	endif($ENV{CMAKE_SYSTEM_LIBRARY_ROOT})
 ENDIF(NOT CMAKE_SYSTEM_LIBRARY_ROOT)
 
-IF( QT4_FOUND OR Qt5_FOUND )
+IF( QT4_FOUND OR Qt5Core_FOUND )
 	# Is QWT installed? Look for header files
-	FIND_PATH( QWT_INCLUDE_DIR qwt_global.h 
+	FIND_PATH( QWT_INCLUDE_DIR NALES qwt_global.h qwt.h
                PATHS ${QT_INCLUDE_DIR} ${CMAKE_SYSTEM_LIBRARY_ROOT} /usr/local/qwt/include /usr/include/qwt 
-               PATH_SUFFIXES qwt qwt5 qwt-qt4 qwt5-qt4 qwt-qt3 qwt5-qt3 include qwt/include qwt5/include qwt-qt4/include qwt5-qt4/include qwt-qt3/include qwt5-qt3/include ENV PATH)
+               PATH_SUFFIXES include/qwt qwt qwt5 qwt-qt4 qwt5-qt4 qwt-qt3 qwt5-qt3 include qwt/include qwt5/include qwt-qt4/include qwt5-qt4/include qwt-qt3/include qwt5-qt3/include ENV PATH)
+		
+	#message(STATUS QWT_INCLUDE_DIR=${QWT_INCLUDE_DIR})
 		
 	# Find Qwt version
 	IF( EXISTS ${QWT_INCLUDE_DIR} )
@@ -70,7 +72,7 @@ IF( QT4_FOUND OR Qt5_FOUND )
 		ELSE(CMAKE_SIZEOF_VOID_P MATCHES 8)
 			SET(QWT_ARCH_STR "")
 		ENDIF(CMAKE_SIZEOF_VOID_P MATCHES 8)
-		
+				
 		IF( QWT_IS_VERSION_5 )
 			STRING(REGEX REPLACE ".*#define[\\t\\ ]+QWT_VERSION_STR[\\t\\ ]+\"([0-9]+\\.[0-9]+\\.[0-9]+)[-_\"].*" "\\1" QWT_VERSION "${QWT_GLOBAL_H}")
 			
@@ -93,7 +95,7 @@ IF( QT4_FOUND OR Qt5_FOUND )
 			NO_DEFAULT_PATH
 		)
 		
-		FIND_LIBRARY(QWT_LIB_DEBUG NAME  ${QWT_BASE}${QWT_COMPILER_STR}${QWT_ARCH_STR}_d${QWT_VERSION_MAJOR}
+		FIND_LIBRARY(QWT_LIB_DEBUG NAMES  ${QWT_BASE}${QWT_COMPILER_STR}${QWT_ARCH_STR}_d${QWT_VERSION_MAJOR}
 			PATH_SUFFIXES Qwt/lib64 Qwt/lib lib64 lib
 			PATHS
 			/sw
@@ -116,7 +118,7 @@ IF( QT4_FOUND OR Qt5_FOUND )
 			
 			MESSAGE( STATUS "Found QWT6: VERSION=" ${QWT_VERSION})
 					
-			FIND_LIBRARY(QWT_LIB_RELEASE NAME ${QWT_BASE}-${QWT_VERSION}${QWT_COMPILER_STR}${QWT_ARCH_STR}
+			FIND_LIBRARY(QWT_LIB_RELEASE NAMES ${QWT_BASE}-${QWT_VERSION}${QWT_COMPILER_STR}${QWT_ARCH_STR} qwt
 			PATH_SUFFIXES Qwt/lib64 Qwt/lib lib64 lib
 			PATHS
 			/sw
@@ -132,7 +134,7 @@ IF( QT4_FOUND OR Qt5_FOUND )
 			NO_DEFAULT_PATH
 		)
 		
-		FIND_LIBRARY(QWT_LIB_DEBUG NAME  ${QWT_BASE}-${QWT_VERSION}${QWT_COMPILER_STR}${QWT_ARCH_STR}_d
+		FIND_LIBRARY(QWT_LIB_DEBUG NAMES  ${QWT_BASE}-${QWT_VERSION}${QWT_COMPILER_STR}${QWT_ARCH_STR}_d qwtd
 			PATH_SUFFIXES Qwt/lib64 Qwt/lib lib64 lib
 			PATHS
 			/sw
@@ -157,8 +159,11 @@ IF( QT4_FOUND OR Qt5_FOUND )
 		
 	ENDIF( EXISTS ${QWT_INCLUDE_DIR} )
 
-   	IF (NOT QWT_FOUND )
-      		MESSAGE(FATAL_ERROR "Could not find Qwt")
-   	ENDIF (NOT QWT_FOUND )
-
+else()
+    dump_all_variables_starting_with(Qt)
+	MESSAGE(FATAL_ERROR "Could not find Qt")
 endif()
+
+IF (NOT QWT_FOUND )
+		MESSAGE(FATAL_ERROR "Could not find Qwt")
+ENDIF (NOT QWT_FOUND )
