@@ -3,7 +3,7 @@
 # and CPack code to support installer generation.
 # --------------------------------------------------------------------
 
-dump_all_variables()
+#dump_all_variables()
 
 if (GET_RUNTIME)
 	if (WIN32)
