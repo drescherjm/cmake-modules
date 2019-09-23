@@ -32,4 +32,4 @@ if (GDCM_VERSION)
 	endif()
 endif(GDCM_VERSION)
 
-dump_all_variables_starting_with(GDCM)
+#dump_all_variables_starting_with(GDCM)

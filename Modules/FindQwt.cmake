@@ -131,7 +131,6 @@ IF( QT4_FOUND OR Qt5Core_FOUND )
 			"C:\\Program Files"
 			"C:\\Program Files(x86)"
 			"${QWT_INCLUDE_DIR}/.."
-			NO_DEFAULT_PATH
 		)
 		
 		FIND_LIBRARY(QWT_LIB_DEBUG NAMES  ${QWT_BASE}-${QWT_VERSION}${QWT_COMPILER_STR}${QWT_ARCH_STR}_d qwtd
@@ -165,5 +164,7 @@ else()
 endif()
 
 IF (NOT QWT_FOUND )
+		dump_all_variables_starting_with(Qwt)
+		dump_all_variables_starting_with(QWT)
 		MESSAGE(FATAL_ERROR "Could not find Qwt")
 ENDIF (NOT QWT_FOUND )
