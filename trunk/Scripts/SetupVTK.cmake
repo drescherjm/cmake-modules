@@ -25,3 +25,15 @@ endif ( "${VTK_VERSION_MAJOR}" EQUAL 5 )
 if( "${VTK_VERSION_MAJOR}" EQUAL 6 )
 	add_definitions(-DUSING_VTK6)
 endif ( "${VTK_VERSION_MAJOR}" EQUAL 6 )
+
+if( "${VTK_VERSION_MAJOR}" EQUAL 7 )
+	add_definitions(-DUSING_VTK7)
+endif ( "${VTK_VERSION_MAJOR}" EQUAL 7 )
+
+if( "${VTK_VERSION_MAJOR}" EQUAL 8 )
+	add_definitions(-DUSING_VTK8)
+endif ( "${VTK_VERSION_MAJOR}" EQUAL 8 )
+
+if( "${VTK_VERSION_MAJOR}" EQUAL 9 )
+	add_definitions(-DUSING_VTK9)
+endif ( "${VTK_VERSION_MAJOR}" EQUAL 9 )
