@@ -11,9 +11,13 @@ if (GET_RUNTIME)
 #########################################################################################
 
 	macro( add_runtime_file BatchFileName RuntimeFile Configuration )
-
+		
 		# Test if this is a valid configuration.
-		STRING( REGEX MATCH ${Configuration} __MATCHED__ ${CMAKE_CONFIGURATION_TYPES})
+		#STRING( REGEX MATCH ${Configuration} __MATCHED__ ${CMAKE_CONFIGURATION_TYPES})
+		
+		LIST_CONTAINS_IGNORE_CASE( __MATCHED__ ${Configuration} ${CMAKE_CONFIGURATION_TYPES})
+		
+		#message(FATAL_ERROR MATCHED=${__MATCHED__})
 		if ( NOT "${__MATCHED__}" STREQUAL "" )
 		
 			if (NOT EXISTS "${EXECUTABLE_OUTPUT_PATH}/${Configuration}")
@@ -30,7 +34,9 @@ if (GET_RUNTIME)
 			
 			#The following line will add the entry in the batch file for copying the Runtime file to the folder ${PROJECT_BINARY_DIR}/${Configuration}/
 			file( APPEND ${BatchFileName} "\"${CMAKE_COMMAND}\" -E copy_if_different \"${RuntimeFile}\" \"${EXECUTABLE_OUTPUT_PATH}/${Configuration}/\"\n" )
-		endif(  NOT "${__MATCHED__}" STREQUAL "" )
+		else()
+			message( STATUS "Not adding ${RuntimeFile} because the configuration ${Configuration} was not listed in the project's configuration types." ) 
+		endif( )
 	endmacro( add_runtime_file )
 	
 #########################################################################################
@@ -56,20 +62,27 @@ endmacro( add_runtime_file_for_packaging )
 #########################################################################################
 
 	macro( add_runtime_for_imported_target TargetName )
-		get_target_property( Configurations ${TargetName} IMPORTED_CONFIGURATIONS )
-		FOREACH(Configuration ${Configurations})
-			message( STATUS "Supporting Configuration ${Configuration}" )
-			get_target_property( implib ${TargetName} IMPORTED_IMPLIB_${Configuration} )
-			# Remember results ending in -NOTFOUND are evaluated to FALSE
-			if(implib)
-				get_target_property( sharedlib ${TargetName} IMPORTED_LOCATION_${Configuration} )
-				if(sharedlib)
-					add_runtime_file( "${RUNTIME_BATCH_FILENAME}" "${sharedlib}" "${Configuration}" )
-				endif(sharedlib)
-			else(implib)
-				message( STATUS "Could not find import for target ${TargetName} Configuration ${Configuration}" )
-			endif(implib)
-		ENDFOREACH(Configuration)
+		if ( TARGET ${TargetName})
+			get_target_property( Configurations ${TargetName} IMPORTED_CONFIGURATIONS )
+						
+			FOREACH(Configuration ${Configurations})
+				message( STATUS "Supporting ${TargetName} Configuration ${Configuration}" )
+				get_target_property( implib ${TargetName} IMPORTED_IMPLIB_${Configuration} )
+				# Remember results ending in -NOTFOUND are evaluated to FALSE
+				if(implib)
+					get_target_property( sharedlib ${TargetName} IMPORTED_LOCATION_${Configuration} )
+					if(sharedlib)
+						add_runtime_file( "${RUNTIME_BATCH_FILENAME}" "${sharedlib}" "${Configuration}" )
+					else()
+						message(FATAL_ERROR No DLL)
+					endif(sharedlib)
+				else(implib)
+					message( STATUS "Could not find import for target ${TargetName} Configuration ${Configuration}" )
+				endif(implib)
+			ENDFOREACH(Configuration)
+		else()
+			message( FATAL_ERROR ${TargetName} is not a target!)
+		endif()
 	endmacro( add_runtime_for_imported_target )
 	
 endif(GET_RUNTIME)
