@@ -293,4 +293,4 @@ ENDFOREACH(module)
 MESSAGE( STATUS "Found Qxt Libraries:${QXT_FOUND_MODULES}")
 MESSAGE( STATUS "Qxt Include directories:${QXT_INCLUDE_DIRS}")
 
-dump_all_variables_starting_with( QXT )
+#dump_all_variables_starting_with( QXT )
