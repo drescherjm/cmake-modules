@@ -141,46 +141,73 @@ SET(QXT_QXTBERKELEY_DEPENDSON QxtCore)
 #FIND_PATH(QXT_DIR libqxt.pro Qxt/include/QxtCore/Qxt)
 FIND_PATH(QXT_BINARY_DIR 
 	NAMES QxtCore${CMAKE_SHARED_LIBRARY_SUFFIX} QxtCored${CMAKE_SHARED_LIBRARY_SUFFIX} 
-	PATHS 
-	${QXT_DIR}/bin  
-	${QXT_DIR}/Bin 
+	PATHS ${QXT_DIR}/bin ${QXT_DIR}/Bin 
 	NO_DEFAULT_PATH
 )
 
 if (VCPKG_TARGET_TRIPLET) 
+    #unset(QXT_BINARY_DIR_RELEASE CACHE)
+	#unset(QXT_BINARY_DIR_DEBUG CACHE)
+	
+	message(STATUS VCPKG_DIR -> ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET})
+	
+	message(STATUS CMAKE_PREFIX_PATH= ${QXT_INCLUDE_DIR})
+	
 	FIND_PATH(QXT_BINARY_DIR_RELEASE 
 		NAME QxtCore${CMAKE_SHARED_LIBRARY_SUFFIX}
-		PATH_SUFFIXES ../../
-		PATHS
-		bin
-		Bin
-	)
-
-	FIND_PATH(QXT_BINARY_DIR_DEBUG 
-		NAME QxtCored${CMAKE_SHARED_LIBRARY_SUFFIX}
-		PATH_SUFFIXES ../debug ../../debug
-		PATHS
-		bin
-		Bin
-		#${QXT_BINARY_DIR_RELEASE}/../debug/bin
+		PATH_SUFFIXES "bin" 
 	)
 	
+	if (NOT QXT_BINARY_DIR_RELEASE)
+	
+			message(STATUS "Could not find QXT_BINARY_DIR_RELEASE using the prefix attempting to use QXT_INCLUDE_DIR")
+	
+			FIND_PATH(QXT_BINARY_DIR_RELEASE 
+				NAME QxtCore${CMAKE_SHARED_LIBRARY_SUFFIX}
+				PATH_SUFFIXES "/bin" "/../bin" "/../../bin" "/../../../bin"
+				PATHS "${QXT_INCLUDE_DIR}/../.." "${QXT_INCLUDE_DIR}/.." "${QXT_INCLUDE_DIR}/../../.."
+				NO_DEFAULT_PATH
+			)
+	endif()
+			
+	FIND_PATH(QXT_BINARY_DIR_DEBUG
+		NAME QxtCored${CMAKE_SHARED_LIBRARY_SUFFIX}
+		PATH_SUFFIXES "debug/bin" 
+	)
+	
+	if (NOT QXT_BINARY_DIR_DEBUG)
+	
+		message(STATUS "Could not find QXT_BINARY_DIR_DEBUG using the prefix attempting to use QXT_INCLUDE_DIR")
+	
+		FIND_PATH(QXT_BINARY_DIR_DEBUG 
+			NAME QxtCored${CMAKE_SHARED_LIBRARY_SUFFIX}
+			PATH_SUFFIXES debug/bin ../debug/bin
+			PATHS "${QXT_INCLUDE_DIR}/../.." "${QXT_INCLUDE_DIR}/.." "${QXT_INCLUDE_DIR}/../../.."
+			NO_DEFAULT_PATH 
+		)
+	endif()
+			
 else()
 	FIND_PATH(QXT_BINARY_DIR_RELEASE 
 		NAME QxtCore${CMAKE_SHARED_LIBRARY_SUFFIX}
-		PATHS 
-		${QXT_DIR}/bin  
-		${QXT_DIR}/Bin 
+		PATHS ${QXT_DIR}/bin ${QXT_DIR}/Bin 
 	)
 
 	FIND_PATH(QXT_BINARY_DIR_DEBUG 
 		NAME QxtCored${CMAKE_SHARED_LIBRARY_SUFFIX}
-		PATHS 
-		${QXT_DIR}/bin  
-		${QXT_DIR}/Bin 
+		PATHS ${QXT_DIR}/bin ${QXT_DIR}/Bin 
 	)
 endif()
-# dump_all_variables()
+
+if (NOT QXT_BINARY_DIR_RELEASE)
+	message( WARNING "Could not find the QXT_BINARY_DIR_RELEASE")
+endif()
+
+if (NOT QXT_BINARY_DIR_DEBUG)
+	message( WARNING "Could not find the QXT_BINARY_DIR_DEBUG")
+endif()
+
+#dump_all_variables()
 
 #message(FATAL_ERROR QXT_BINARY_DIR_RELEASE=${QXT_BINARY_DIR_RELEASE} QxtCore${CMAKE_SHARED_LIBRARY_SUFFIX})
 
@@ -294,3 +321,5 @@ MESSAGE( STATUS "Found Qxt Libraries:${QXT_FOUND_MODULES}")
 MESSAGE( STATUS "Qxt Include directories:${QXT_INCLUDE_DIRS}")
 
 #dump_all_variables_starting_with( QXT )
+
+dump_all_variables_starting_with( _VCPKG )
