@@ -149,9 +149,9 @@ if (VCPKG_TARGET_TRIPLET)
     #unset(QXT_BINARY_DIR_RELEASE CACHE)
 	#unset(QXT_BINARY_DIR_DEBUG CACHE)
 	
-	message(STATUS VCPKG_DIR -> ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET})
+	#message(STATUS VCPKG_DIR -> ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET})
 	
-	message(STATUS CMAKE_PREFIX_PATH= ${QXT_INCLUDE_DIR})
+	#message(STATUS CMAKE_PREFIX_PATH= ${CMAKE_PREFIX_PATH})
 	
 	FIND_PATH(QXT_BINARY_DIR_RELEASE 
 		NAME QxtCore${CMAKE_SHARED_LIBRARY_SUFFIX}
@@ -322,4 +322,4 @@ MESSAGE( STATUS "Qxt Include directories:${QXT_INCLUDE_DIRS}")
 
 #dump_all_variables_starting_with( QXT )
 
-dump_all_variables_starting_with( _VCPKG )
+#dump_all_variables_starting_with( _VCPKG )
