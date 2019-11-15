@@ -23,6 +23,16 @@ if (GET_RUNTIME)
 			
 			STRING( REGEX REPLACE ".lib$" "" QWT_RELEASE_DLL_NAME ${QWT_RELEASE_DLL_NAME_EXT})
 			
+			
+			if (VCPKG_TARGET_TRIPLET) 
+			
+				# The lib folder in vcpkg does not have the dlls
+				SET(QWT_DEBUG_DLL_BASE ${QWT_DEBUG_DLL_BASE}/../bin)
+				SET(QWT_RELEASE_DLL_BASE ${QWT_RELEASE_DLL_BASE}/../bin)
+				
+				#dump_all_variables_starting_with(QWT)
+			endif()
+			
 			add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QWT_DEBUG_DLL_BASE}/${QWT_DEBUG_DLL_NAME}.dll" Debug )
 			add_runtime_file( ${RUNTIME_BATCH_FILENAME} "${QWT_RELEASE_DLL_BASE}/${QWT_RELEASE_DLL_NAME}.dll" RelWithDebInfo )
 			add_runtime_file_for_packaging( ${RUNTIME_BATCH_FILENAME} "${QWT_RELEASE_DLL_BASE}/${QWT_RELEASE_DLL_NAME}.dll" Release )
