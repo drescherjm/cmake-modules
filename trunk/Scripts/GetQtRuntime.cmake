@@ -32,6 +32,10 @@ if (GET_RUNTIME)
 		add_qt_sqldriver_file( ${BatchFileName} ${RuntimeFile} ${Release} )
 		#SET( ${PROJECT_NAME}_RELEASE_RUNTIME  ${${PROJECT_NAME}_RELEASE_RUNTIME} ${RuntimeFile} )
 		
+		#message( FATAL_ERROR "Stop For Debugging! ${RuntimeFile} ")
+		
+		SET_PROPERTY(GLOBAL APPEND PROPERTY UPMC_PACKAGE_PLUGINS ${RuntimeFile})
+		
 		INSTALL(FILES ${RuntimeFile}
 			DESTINATION bin/sqldrivers
 			COMPONENT Applications
@@ -64,7 +68,7 @@ if (GET_RUNTIME)
 		
 		add_qt_plugin_file( ${BatchFileName} ${RuntimeFile} ${Release} )
 		#SET( ${PROJECT_NAME}_RELEASE_RUNTIME  ${${PROJECT_NAME}_RELEASE_RUNTIME} ${RuntimeFile} )
-		
+				
 		INSTALL(FILES ${RuntimeFile}
 			DESTINATION bin/plugins
 			COMPONENT Applications
