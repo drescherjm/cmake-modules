@@ -205,6 +205,23 @@ function( setup_qt_plugin PluginTargetName)
 	set_target_properties(${PluginTargetName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_BINARY_DIR}/bin/RelWithDebInfo/plugins)
 	set_target_properties(${PluginTargetName} PROPERTIES FOLDER Plugins)
 	
+	#get_
+	
+	get_target_property(RELEASE_POSTFIX ${PluginTargetName} RELEASE_POSTFIX)
+	SET_PROPERTY(GLOBAL APPEND PROPERTY UPMC_PACKAGE_PLUGINS "${CMAKE_BINARY_DIR}/bin/Release/plugins/${PluginTargetName}${RELEASE_POSTFIX}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+	
+	#print_target_properties(${PluginTargetName})
+	
+	#echo_target_property(${PluginTargetName} SUFFIX)
+	
+	#echo_target(${PluginTargetName} )
+	
+	
+	#get_target_property(RELEASE_POSTFIX ${PluginTargetName} RELEASE_POSTFIX)
+	#get_target_property(RELEASE_POSTFIX ${PluginTargetName} SUFFIX)
+	
+	#message( FATAL_ERROR "Stop For Debugging! ${CMAKE_BINARY_DIR}/bin/Release/plugins/${PluginTargetName}${RELEASE_POSTFIX}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+			
 	if(PACKAGE_FOR_INSTALL)
 		INSTALL(TARGETS ${PluginTargetName}
 			DESTINATION bin/plugins
