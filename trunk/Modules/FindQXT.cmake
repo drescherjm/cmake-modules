@@ -209,7 +209,7 @@ endif()
 
 #dump_all_variables()
 
-#message(FATAL_ERROR QXT_BINARY_DIR_RELEASE=${QXT_BINARY_DIR_RELEASE} QxtCore${CMAKE_SHARED_LIBRARY_SUFFIX})
+#message(FATAL_ERROR QXT_BINARY_DIR_RELEASE="${QXT_BINARY_DIR_RELEASE} QxtCore${CMAKE_SHARED_LIBRARY_SUFFIX}")
 
 #SET(QXT_BINARY_DIR "${QXT_DIR}/bin" CACHE PATH "${QXT_DIR}/bin")
 
@@ -245,6 +245,7 @@ FOREACH(mod ${QXT_MODULES})
 		"C:\\"
 		"C:\\Program Files"
 		"C:\\Program Files(x86)"
+		${QXT_BINARY_DIR_RELEASE}/../lib
 		${QXT_DIR}
 		NO_DEFAULT_PATH
 	)
@@ -260,6 +261,7 @@ FOREACH(mod ${QXT_MODULES})
 		"C:\\"
 		"C:\\Program Files"
 		"C:\\Program Files(x86)"
+		${QXT_BINARY_DIR_DEBUG}/../lib
 		${QXT_DIR}
 		NO_DEFAULT_PATH
 	)
@@ -321,5 +323,7 @@ MESSAGE( STATUS "Found Qxt Libraries:${QXT_FOUND_MODULES}")
 MESSAGE( STATUS "Qxt Include directories:${QXT_INCLUDE_DIRS}")
 
 #dump_all_variables_starting_with( QXT )
+
+#message(FATAL_ERROR QXT_BINARY_DIR_RELEASE="${QXT_BINARY_DIR_RELEASE} QxtCore${CMAKE_SHARED_LIBRARY_SUFFIX}")
 
 #dump_all_variables_starting_with( _VCPKG )
