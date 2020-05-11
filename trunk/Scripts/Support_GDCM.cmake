@@ -4,6 +4,8 @@ if (NOT GDCM_VERSION)
 	INCLUDE(${GDCM_USE_FILE})
 endif(NOT GDCM_VERSION)
 
+dump_all_variables_starting_with( GDCM )
+
 if (GDCM_VERSION) 
     if (${GDCM_VERSION} VERSION_GREATER_EQUAL "3.0.0") 
         # Only include the GDCM Targets that exist!
