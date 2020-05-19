@@ -2,6 +2,8 @@ if (NOT GDCM_VERSION)
 	FIND_PACKAGE(GDCM REQUIRED)
 	unset(GDCM_USE_VTK)
 	INCLUDE(${GDCM_USE_FILE})
+else()
+	INCLUDE(${GDCM_USE_FILE})
 endif(NOT GDCM_VERSION)
 
 dump_all_variables_starting_with( GDCM )
