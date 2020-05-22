@@ -30,7 +30,7 @@ if (GDCM_VERSION)
     elseif (${GDCM_VERSION} VERSION_GREATER "2.0.18") 
 		SET(UPMC_EXTERNAL_LIBS ${UPMC_EXTERNAL_LIBS} 
 			gdcmdict gdcmCommon gdcmcharls gdcmDSED gdcmIOD 
-			gdcmexpat gdcmjpeg8 gdcmjpeg12 gdcmjpeg16 gdcmopenjpeg
+			gdcmexpat gdcmjpeg8 gdcmjpeg12 gdcmjpeg16
 			gdcmMSFF gdcmMEXD gdcmzlib
 		)
 	endif()
