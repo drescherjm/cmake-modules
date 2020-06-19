@@ -1,6 +1,12 @@
 macro ( PackageSystemRuntime Component )
 
 	 set(MY_PFX86 "PROGRAMFILES(X86)") 
+	 
+	# When the old version of the Microsoft Redistributable is no longer in the same location remove the entry
+	# in the cache so we can redetect the new location.
+	if (NOT EXISTS ${MSVC_REDIST})
+		unset(MSVC_REDIST CACHE)
+	endif()
 	 	 
 	# MESSAGE( STATUS MSVC_VERSION=${MSVC_VERSION} )
 	# MESSAGE( STATUS CMAKE_CXX_COMPILER_VERSION=${CMAKE_CXX_COMPILER_VERSION} )
