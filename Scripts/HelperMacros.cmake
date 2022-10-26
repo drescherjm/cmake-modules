@@ -5,6 +5,23 @@
 #
 #########################################################################################
 
+function (_get_all_cmake_targets out_var current_dir)
+    get_property(targets DIRECTORY ${current_dir} PROPERTY BUILDSYSTEM_TARGETS)
+	get_property(importTargets DIRECTORY ${current_dir} PROPERTY IMPORTED_TARGETS)
+	get_property(subdirs DIRECTORY ${current_dir} PROPERTY SUBDIRECTORIES)
+	
+	list(APPEND targets	${importTargets})
+
+    foreach(subdir ${subdirs})
+        _get_all_cmake_targets(subdir_targets ${subdir})
+        list(APPEND targets ${subdir_targets})
+		get_property(importTargets DIRECTORY ${subdir} PROPERTY IMPORTED_TARGETS)
+		list(APPEND targets ${importTargets})
+    endforeach()
+
+    set(${out_var} ${targets} PARENT_SCOPE)
+endfunction()
+
 #########################################################################################
 # The print_properties ... macros were taken from the following StackOverflow post:
 # https://stackoverflow.com/questions/32183975/how-to-print-all-the-properties-of-a-target-in-cmake
