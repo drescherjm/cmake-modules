@@ -63,6 +63,12 @@ endmacro( add_runtime_file_for_packaging )
 
 	macro( add_runtime_for_imported_target TargetName )
 		if ( TARGET ${TargetName})
+			# Add optional arguments for the configurations to package. If used you 
+			# most likely just want Release
+			
+			set (extra_args ${ARGN})
+			list(LENGTH extra_args extra_count)
+    
 			get_target_property( Configurations ${TargetName} IMPORTED_CONFIGURATIONS )
 						
 			FOREACH(Configuration ${Configurations})
@@ -78,7 +84,7 @@ endmacro( add_runtime_file_for_packaging )
 					endif(sharedlib)
 				else(implib)
 					get_target_property( target_type ${TargetName} TYPE )
-					message( STATUS "Could not find import for target ${TargetName} Configuration ${Configuration} Type=${target_type}" )
+					message( STATUS "Could not find import library for target ${TargetName} Configuration ${Configuration} Type=${target_type}" )
 					if (target_type STREQUAL "EXECUTABLE")
 						get_target_property( sharedlib ${TargetName} IMPORTED_LOCATION_${Configuration} )
 						if (sharedlib) 
@@ -86,6 +92,19 @@ endmacro( add_runtime_file_for_packaging )
 						endif()
 					endif()
 				endif(implib)
+				
+				# This part is for packaging
+				if (${extra_count} GREATER 0)
+					if (sharedlib) 
+						FOREACH(arg ${extra_args}) 
+							string(TOUPPER ${arg} uppercase_arg)
+							message(STATUS Arg=${uppercase_arg}, Configuration=${Configuration})
+							if (${uppercase_arg} STREQUAL ${Configuration})
+								SET( ${PROJECT_NAME}_PACKAGING_RUNTIME  ${${PROJECT_NAME}_PACKAGING_RUNTIME} ${sharedlib} )	
+							endif()
+						ENDFOREACH(arg)
+					endif()
+				endif()
 			ENDFOREACH(Configuration)
 		else()
 			message( FATAL_ERROR ${TargetName} is not a target!)
