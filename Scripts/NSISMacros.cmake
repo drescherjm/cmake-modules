@@ -61,25 +61,25 @@ endmacro( NSIS_CREATE_SHORTCUT )
 
 #########################################################################################
 
-macro( NSIS_CREATE_SHORTCUT_NO_EXTRA_ESCAPING ShortCutName ShortCutTargetNew )
+macro( NSIS_CREATE_SHORTCUT_NO_EXTRA_ESCAPING ShortCutNameNew ShortCutTargetNew )
 
-	string( REPLACE "\\" "\\\\" ShortCutNameNew "${ShortCutName}" )
+	#string( REPLACE "\\" "\\\\" ShortCutNameNew "${ShortCutName}" )
 	#string( REPLACE "\\" "\\\\" ShortCutTargetNew "${ShortCutTarget}" )
 		
 	set(result)
 	foreach(VALUENew ${ARGN})
 		#string( REPLACE "\\" "\\\\" VALUENew "${VALUE}" )
 		if ( "${result}" STREQUAL "" )
-			set(result "\\n  CreateShortCut \\\"${ShortCutNameNew}\\\" \\\"${ShortCutTargetNew}\\\" \\\"${VALUENew}\\\" ")
+			set(result "\n  CreateShortCut \"${ShortCutNameNew}\" \"${ShortCutTargetNew}\" \"${VALUENew}\" ")
 		else()
-			set(result "${result} \\\"${VALUENew}\\\" ")
+			set(result "${result} \"${VALUENew}\" ")
 		endif()
 	endforeach(VALUENew)
 	
-	#message( STATUS ARGC=${ARGC} )
+	#message( STATUS Result=${result} )
 	
 	if ( ${ARGC} LESS 3 )
-		set(result "\\n  CreateShortCut \\\"${ShortCutNameNew}\\\" \\\"${ShortCutTargetNew}\\\" ")
+		set(result "\n  CreateShortCut \"${ShortCutNameNew}\" \"${ShortCutTargetNew}\" ")
 	endif (  ${ARGC} LESS 3 )
 	
 	# Create extra start menu folder for Admin tasks 
@@ -90,7 +90,7 @@ macro( NSIS_CREATE_SHORTCUT_NO_EXTRA_ESCAPING ShortCutName ShortCutTargetNew )
 
 	# Uninstall remove extra start menu folder for Admin tasks 
 	set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS 
-		"\\n  Delete \\\"${ShortCutNameNew}\\\" " 
+		"\n  Delete \"${ShortCutNameNew}\" " 
 		${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}
 	)
 
