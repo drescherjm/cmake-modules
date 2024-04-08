@@ -38,7 +38,7 @@ if (GET_RUNTIME)
 		
 		INSTALL(FILES ${RuntimeFile}
 			DESTINATION bin/sqldrivers
-			COMPONENT Applications
+			COMPONENT Runtime
 		)
 		
 	endmacro( add_sqldriver_file_for_packaging )
@@ -71,7 +71,7 @@ if (GET_RUNTIME)
 				
 		INSTALL(FILES ${RuntimeFile}
 			DESTINATION bin/plugins
-			COMPONENT Applications
+			COMPONENT Runtime
 		)
 		
 	endmacro( add_qt_plugin_file_for_packaging )
@@ -105,7 +105,7 @@ if (GET_RUNTIME)
 		
 		INSTALL(FILES ${RuntimeFile}
 			DESTINATION bin/platforms
-			COMPONENT Applications
+			COMPONENT Runtime
 		)
 		
 	endmacro( add_qt_platform_file_for_packaging )
