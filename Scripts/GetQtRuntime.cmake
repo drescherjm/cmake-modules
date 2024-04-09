@@ -41,6 +41,11 @@ if (GET_RUNTIME)
 			COMPONENT Applications
 		)
 		
+		INSTALL(FILES ${RuntimeFile}
+			DESTINATION bin/sqldrivers
+			COMPONENT PortableApplications
+		)
+		
 	endmacro( add_sqldriver_file_for_packaging )
 	
 #########################################################################################
@@ -74,6 +79,11 @@ if (GET_RUNTIME)
 			COMPONENT Applications
 		)
 		
+		INSTALL(FILES ${RuntimeFile}
+			DESTINATION bin/plugins
+			COMPONENT PortableApplications
+		)
+		
 	endmacro( add_qt_plugin_file_for_packaging )
 	
 #########################################################################################
@@ -88,6 +98,8 @@ if (GET_RUNTIME)
 			file( WRITE ${BatchFileName} "REM This file will copy the runtimes to the Debug and Release binary folders\n" )
 		endif ( NOT DEFINED __add_runtime_file_${BatchFile}__)
 		
+		#SET_PROPERTY(GLOBAL APPEND PROPERTY UPMC_PACKAGE_PLUGINS ${RuntimeFile})
+				
 		message( STATUS "CREATING ${EXECUTABLE_OUTPUT_PATH}/${Release}/platforms")
 		file( MAKE_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}/${Release}/platforms" )
 		
@@ -106,6 +118,11 @@ if (GET_RUNTIME)
 		INSTALL(FILES ${RuntimeFile}
 			DESTINATION bin/platforms
 			COMPONENT Applications
+		)
+		
+		INSTALL(FILES ${RuntimeFile}
+			DESTINATION bin/platforms
+			COMPONENT PortableApplications
 		)
 		
 	endmacro( add_qt_platform_file_for_packaging )
