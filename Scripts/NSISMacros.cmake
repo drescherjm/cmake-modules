@@ -24,6 +24,26 @@ endmacro( NSIS_CREATE_DIRECTORY )
 
 #########################################################################################
 
+macro( NSIS_CREATE_DIRECTORY_NO_EXTRA_ESCAPING FolderPathNew )
+	
+	message( STATUS FolderPathNew="${FolderPathNew}" )
+
+	# Create extra start menu folder for Admin tasks 
+	set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS 
+		${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}
+		"\n  CreateDirectory \"${FolderPathNew}\" "
+	)
+	
+	# Uninstall remove extra start menu folder for Admin tasks 
+	set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS 
+		"\n  RMDir \"${FolderPathNew}\" "
+		${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}
+	)
+	
+endmacro( NSIS_CREATE_DIRECTORY_NO_EXTRA_ESCAPING )
+
+#########################################################################################
+
 macro( NSIS_CREATE_SHORTCUT ShortCutName ShortCutTarget )
 
 	string( REPLACE "\\" "\\\\" ShortCutNameNew "${ShortCutName}" )
