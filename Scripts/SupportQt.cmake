@@ -33,10 +33,11 @@ endif()
 
 mark_as_advanced(${PROJECT_NAME}_QT_VERSION)
 
-set_property(CACHE ${PROJECT_NAME}_QT_VERSION PROPERTY STRINGS 4 5)
+set_property(CACHE ${PROJECT_NAME}_QT_VERSION PROPERTY STRINGS 4 5 6)
 
-if(NOT (${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "4" OR ${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "5"))
-	message(FATAL_ERROR "Expected value for ${PROJECT_NAME}_QT_VERSION is either '4' or '5'")
+if(NOT (${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "4" OR ${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "5" 
+	OR ${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "6"))
+	message(FATAL_ERROR "Expected value for ${PROJECT_NAME}_QT_VERSION is between '4' and '6'")
 endif()
 
 #########################################################################################
@@ -288,3 +289,4 @@ macro( get_qt_base_dir )
 endmacro( get_qt_base_dir )
 
 #########################################################################################
+
