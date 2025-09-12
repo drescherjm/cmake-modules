@@ -35,11 +35,23 @@ mark_as_advanced(${PROJECT_NAME}_QT_VERSION)
 
 set_property(CACHE ${PROJECT_NAME}_QT_VERSION PROPERTY STRINGS 4 5 6)
 
+
+#[[
 if(NOT (${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "4" OR ${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "5" 
 	OR ${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "6"))
-	message(FATAL_ERROR "Expected value for ${PROJECT_NAME}_QT_VERSION is between '4' and '6'" 
- 		" however the value was set to: " ${${PROJECT_NAME}_QT_VERSION})
+	message(FATAL_ERROR "Expected value for ${PROJECT_NAME}_QT_VERSION is between '4' and '6' \
+ however the value was set to: " ${${PROJECT_NAME}_QT_VERSION}
  )
+endif()
+]]#
+
+set(__valid_qt_versions 4 5 6)
+list(FIND __valid_qt_versions ${${PROJECT_NAME}_QT_VERSION} __index)
+if(__index EQUAL -1)
+    message(FATAL_ERROR
+        "Expected value for ${PROJECT_NAME}_QT_VERSION is 4, 5, or 6 "
+        "but got: ${${PROJECT_NAME}_QT_VERSION}"
+    )
 endif()
 
 #########################################################################################
