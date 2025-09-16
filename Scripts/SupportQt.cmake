@@ -35,16 +35,6 @@ mark_as_advanced(${PROJECT_NAME}_QT_VERSION)
 
 set_property(CACHE ${PROJECT_NAME}_QT_VERSION PROPERTY STRINGS 4 5 6)
 
-
-#[[
-if(NOT (${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "4" OR ${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "5" 
-	OR ${PROJECT_NAME}_QT_VERSION VERSION_EQUAL "6"))
-	message(FATAL_ERROR "Expected value for ${PROJECT_NAME}_QT_VERSION is between '4' and '6' \
- however the value was set to: " ${${PROJECT_NAME}_QT_VERSION}
- )
-endif()
-]]#
-
 set(__valid_qt_versions 4 5 6)
 list(FIND __valid_qt_versions ${${PROJECT_NAME}_QT_VERSION} __index)
 if(__index EQUAL -1)
@@ -52,6 +42,10 @@ if(__index EQUAL -1)
         "Expected value for ${PROJECT_NAME}_QT_VERSION is 4, 5, or 6 "
         "but got: ${${PROJECT_NAME}_QT_VERSION}"
     )
+endif()
+
+if ( NOT QT_VERSION_MAJOR )
+	set(QT_VERSION_MAJOR ${${PROJECT_NAME}_QT_VERSION})
 endif()
 
 #########################################################################################
@@ -97,7 +91,18 @@ endmacro( find_qt5_packages )
 
 macro ( setup_library_qt_wrap_support )
 
-	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "5")
+		
+		# this command will generate rules that will run rcc on all files from UPMC_LA_RCS
+		# in result UPMC_LA_RC_SRCS variable will contain paths to files produced by rcc
+		QT6_ADD_RESOURCES( ${LOCAL_PROJECT_NAME}_RC_SRCS ${${LOCAL_PROJECT_NAME}_RCS} )
+
+		# and finally this will run moc:
+		QT6_WRAP_CPP( ${LOCAL_PROJECT_NAME}_MOC_SRCS ${${LOCAL_PROJECT_NAME}_MOC_HDRS} )
+		
+		# this will run uic on .ui files:
+		QT6_WRAP_UI( ${LOCAL_PROJECT_NAME}_UI_HDRS ${${LOCAL_PROJECT_NAME}_UIS} )
+	elseif(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
 		
 		# this command will generate rules that will run rcc on all files from UPMC_LA_RCS
 		# in result UPMC_LA_RC_SRCS variable will contain paths to files produced by rcc
@@ -132,7 +137,17 @@ endmacro ( setup_library_qt_wrap_support )
 
 function( setup_qt_executable ExecTarget)
 
-	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "5")
+		# this command will generate rules that will run rcc on all files from ${ExecTarget}_RCS
+		# in result ${ExecTarget}_RC_SRCS variable will contain paths to files produced by rcc
+		QT6_ADD_RESOURCES( ${ExecTarget}_RC_SRCS ${${ExecTarget}_RCS} )
+
+		# and finally this will run moc:
+		QT6_WRAP_CPP( ${ExecTarget}_MOC_SRCS ${${ExecTarget}_MOC_HDRS} )
+
+		# this will run uic on .ui files:
+		QT6_WRAP_UI( ${ExecTarget}_UI_HDRS ${${ExecTarget}_UIS} )
+	elseif(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
 		# this command will generate rules that will run rcc on all files from ${ExecTarget}_RCS
 		# in result ${ExecTarget}_RC_SRCS variable will contain paths to files produced by rcc
 		QT5_ADD_RESOURCES( ${ExecTarget}_RC_SRCS ${${ExecTarget}_RCS} )
@@ -251,8 +266,9 @@ endfunction( setup_qt_plugin)
 macro( QT45_WRAP_CPP )
 
 	#NOTE: Keep these as macros. functions will not work!
-
-	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "5")
+		QT6_WRAP_CPP( ${ARGV} )
+	elseif(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
 		#message( STATUS "QT5_WRAP_CPP( ${ARGV} )" )
 		QT5_WRAP_CPP( ${ARGV} )
 	else()
@@ -266,7 +282,9 @@ endmacro ( QT45_WRAP_CPP )
 
 macro( QT45_WRAP_UI )
 
-	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "5")
+		QT6_WRAP_UI( ${ARGV} )
+	elseif(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
 		QT5_WRAP_UI( ${ARGV} )
 	else()
 		QT4_WRAP_UI( ${ARGV} )
@@ -278,7 +296,9 @@ endmacro ( QT45_WRAP_UI )
 
 macro( QT45_ADD_RESOURCES )
 
-	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
+	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "5")
+		QT6_ADD_RESOURCES( ${ARGV} )
+	elseif (${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
 		QT5_ADD_RESOURCES( ${ARGV} )
 	else()
 		QT4_ADD_RESOURCES( ${ARGV} )
@@ -290,7 +310,7 @@ endmacro ( QT45_ADD_RESOURCES )
 
 macro( get_qt_base_dir )
 	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
-		if ( NOT TARGET Qt5::Core ) 
+		if ( NOT TARGET Qt${QT_VERSION_MAJOR}::Core ) 
 			message( WARNING "Please call get_qt_base_dir after you find Qt" )
 		else()
 			get_target_property(_QtCore_location Qt5::Core LOCATION)

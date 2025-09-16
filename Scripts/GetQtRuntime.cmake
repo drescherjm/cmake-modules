@@ -133,9 +133,8 @@ if (GET_RUNTIME)
 		
 		if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
 		
-			#get_target_property(QtCore_LOCATION Qt5::Core LINK_DEPENDS)
-			get_target_property(QtCore_LOCATION Qt5::Core LOCATION_DEBUG)
-			message( STATUS Qt5  "${Qt5Widgets_LIBRARIES} ${Qt5Core_LIBRARIES} ${QtCore_LOCATION}" )
+			get_target_property(QtCore_LOCATION Qt${QT_VERSION_MAJOR}::Core LOCATION_DEBUG)
+			message( STATUS Qt5  "${Qt${QT_VERSION_MAJOR}Widgets_LIBRARIES} ${Qt${QT_VERSION_MAJOR}Core_LIBRARIES} ${QtCore_LOCATION}" )
 							
 			# Add each component to the list of runtime files
 			foreach(MODULE ${QT_MODULES})
