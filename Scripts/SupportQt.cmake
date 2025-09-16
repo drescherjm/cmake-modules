@@ -68,6 +68,22 @@ endif()
 #########################################################################################
 
 macro( find_qt5_packages )
+
+	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "5")
+		if ( TARGET Qt${QT_VERSION_MAJOR}::Core) 
+			if (NOT CMAKE_CXX_STANDARD GREATER_EQUAL 17)
+				#message(FATAL_ERROR "You must enable c++17 for Qt6")
+				set(CMAKE_CXX_STANDARD 17)
+				set(CMAKE_CXX_STANDARD_REQUIRED ON)
+				
+				if(MSVC)
+					add_compile_options(/std:c++17 /Zc:__cplusplus)
+				endif()
+				
+			endif()
+		endif()
+	endif()
+
 	if(${PROJECT_NAME}_QT_VERSION VERSION_GREATER "4")
 		foreach(MODULE ${QT_MODULES}) 
 			if ( NOT TARGET ${MODULE} ) 
