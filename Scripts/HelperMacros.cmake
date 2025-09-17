@@ -5,6 +5,15 @@
 #
 #########################################################################################
 
+function(append_unique list_name item)
+    set(local_list "${${list_name}}")
+    list(FIND local_list "${item}" item_index)
+    if(item_index EQUAL -1)
+        list(APPEND local_list "${item}")
+        set(${list_name} "${local_list}" PARENT_SCOPE)
+    endif()
+endfunction()
+
 function (_get_all_cmake_targets out_var current_dir)
     get_property(targets DIRECTORY ${current_dir} PROPERTY BUILDSYSTEM_TARGETS)
 	get_property(importTargets DIRECTORY ${current_dir} PROPERTY IMPORTED_TARGETS)
@@ -350,6 +359,13 @@ macro(LIST_TO_CSV_STRING my_string)
 endmacro(LIST_TO_CSV_STRING)
 
 #########################################################################################
+#[[
+This macro prints a list adding a comma between arguments.
+
+For example: 
+print_list("QXT_LIBRARIES=" ${QXT_LIBRARIES})
+And it will print -- QXT_LIBRARIES= Qxt::QxtCore,Qxt::QxtGui
+]]#
 
 macro( print_list my_message)
 	unset(__LIST_OUTPUT__)
