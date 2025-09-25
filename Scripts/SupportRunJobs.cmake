@@ -1,5 +1,10 @@
 if(WIN32)
-	option(USE_RUNJOBS_PARALLEL_BUILDING "Build configurations in parallel using RunJobs" ON)
+
+	if(NOT DEFINED VCPKG_TARGET_TRIPLET)
+		option(USE_RUNJOBS_PARALLEL_BUILDING "Build configurations in parallel using RunJobs" ON)
+	else()
+		option(USE_RUNJOBS_PARALLEL_BUILDING "Build configurations in parallel using RunJobs" OFF)
+	endif()
 	
 	if ( USE_RUNJOBS_PARALLEL_BUILDING ) 
 		if (NOT DEFINED RUNJOBS_EXECUTABLE)
