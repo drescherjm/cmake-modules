@@ -22,7 +22,7 @@ if ( NOT DEFINED ${${PROJECT_NAME}_QT_VERSION} )
 	endif()
 	
 	if ( NOT DEFINED ${${PROJECT_NAME}_QT_VERSION} )
-		if (NOT MSVC14)
+		if (MSVC AND (MSVC_VERSION LESS 1900))
 			# We could not get the version from the environment so assume the default is 4..
 			set(${PROJECT_NAME}_QT_VERSION "4" CACHE STRING "Expected Qt version")
 		else()
@@ -343,5 +343,6 @@ macro( get_qt_base_dir )
 endmacro( get_qt_base_dir )
 
 #########################################################################################
+
 
 
