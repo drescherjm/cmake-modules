@@ -14,6 +14,24 @@ function(append_unique list_name item)
     endif()
 endfunction()
 
+#########################################################################################
+
+function(print_target_list)
+    if(${ARGC} GREATER 0)
+        set(folder "${ARGV0}")
+    else()
+        set(folder "${PROJECT_SOURCE_DIR}")
+    endif()
+
+    _get_all_cmake_targets(all_targets "${folder}")
+    message(STATUS "Defined targets:")
+    foreach(tgt IN LISTS all_targets)
+        message(STATUS "  ${tgt}")
+    endforeach()
+endfunction()
+
+#########################################################################################
+
 function (_get_all_cmake_targets out_var current_dir)
     get_property(targets DIRECTORY ${current_dir} PROPERTY BUILDSYSTEM_TARGETS)
 	get_property(importTargets DIRECTORY ${current_dir} PROPERTY IMPORTED_TARGETS)
